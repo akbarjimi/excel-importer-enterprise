@@ -1,21 +1,24 @@
 {
   "name": "akbarjimi/laravel-excel-importer",
-  "description": "Distributed, queue-based Excel importer for Laravel 10 with configurable error handling and transformation.",
+  "description": "Distributed, queue-based Excel importer for Laravel 12 with configurable error handling and transformation.",
   "type": "library",
   "license": "MIT",
   "require": {
     "php": "^8.4",
-    "illuminate/support": "^10.0",
+    "illuminate/support": "^12.0",
     "maatwebsite/excel": "^3.1"
   },
   "require-dev": {
-    "orchestra/testbench": "^9.6",
-    "pestphp/pest": "^2.0",
-    "pestphp/pest-plugin-laravel": "^2.0"
+    "orchestra/testbench": "^10.2",
+    "pestphp/pest": "^3.8",
+    "pestphp/pest-plugin-laravel": "^3.2"
   },
   "config": {
     "platform": {
       "php": "8.4.5"
+    },
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
     }
   },
   "autoload": {
