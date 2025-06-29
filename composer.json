@@ -4,14 +4,19 @@
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": "^8.0",
+    "php": "^8.4",
     "illuminate/support": "^10.0",
     "maatwebsite/excel": "^3.1"
   },
   "require-dev": {
-    "orchestra/testbench": "^7.0",
+    "orchestra/testbench": "^9.6",
     "pestphp/pest": "^2.0",
     "pestphp/pest-plugin-laravel": "^2.0"
+  },
+  "config": {
+    "platform": {
+      "php": "8.4.5"
+    }
   },
   "autoload": {
     "psr-4": {
