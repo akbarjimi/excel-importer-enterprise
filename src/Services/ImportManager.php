@@ -10,10 +10,14 @@ class ImportManager
 {
     public function import(string $binaryContents, string $originalPath): ExcelFile
     {
-        $tempPath = storage_path('app/tmp/' . Str::random(40) . '.xlsx');
-        file_put_contents($tempPath, $binaryContents);
+        $tmpDir = storage_path('app/tmp');
 
-        $spreadsheet = IOFactory::load($tempPath);
+        if (!File::exists($tmpDir)) {
+            File::makeDirectory($tmpDir, recursive: true);
+        }
+
+        $tempPath = $tmpDir . '/' . Str::random(40) . '.xlsx';
+        file_put_contents($tempPath, $binaryContents);
 
         return ExcelFile::create([
             'file_name' => basename($originalPath),
