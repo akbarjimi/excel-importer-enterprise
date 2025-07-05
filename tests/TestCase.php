@@ -2,8 +2,8 @@
 
 namespace Akbarjimi\ExcelImporter\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use Akbarjimi\ExcelImporter\ExcelImporterServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
@@ -17,15 +17,16 @@ abstract class TestCase extends Orchestra
         ];
     }
 
-    /**
-     * Set up in-memory sqlite database or other config if needed.
-     */
     protected function getEnvironmentSetUp($app): void
     {
-        // Example: configure DB to sqlite memory for future migration tests
-        // $app['config']->set('database.default', 'testbench');
-        // $app['config']->set('database.connections.testbench', [
-        //     'driver' => 'sqlite', 'database' => ':memory:'
-        // ]);
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver' => 'sqlite', 'database' => ':memory:'
+        ]);
+    }
+
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/../src/database/migrations');
     }
 }
