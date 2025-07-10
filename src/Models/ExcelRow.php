@@ -4,7 +4,7 @@ namespace Akbarjimi\ExcelImporter\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ExcelRow
+class ExcelRow extends Model
 {
 
 }
