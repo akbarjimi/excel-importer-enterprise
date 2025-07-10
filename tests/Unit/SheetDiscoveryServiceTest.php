@@ -5,11 +5,15 @@ use Akbarjimi\ExcelImporter\Services\SheetDiscoveryService;
 use Illuminate\Support\Facades\File;
 
 it('discovers sheets from Excel file', function () {
-    $source = __DIR__ . '/../stubs/sample.xlsx';
+    $storageRelativePath = 'imports/sample.xlsx';
+    $fullPath = storage_path("app/{$storageRelativePath}");
+
+    File::ensureDirectoryExists(dirname($fullPath));
+    File::copy(__DIR__ . '/../stubs/sample.xlsx', $fullPath);
 
     $file = ExcelFile::create([
         'file_name' => 'sample.xlsx',
-        'path' => $source,
+        'path' => $storageRelativePath,
         'driver' => 'local',
     ]);
 
@@ -17,4 +21,6 @@ it('discovers sheets from Excel file', function () {
     $sheets = $service->discover($file);
 
     expect($sheets)->not()->toBeEmpty();
+
+    File::delete($fullPath);
 });
