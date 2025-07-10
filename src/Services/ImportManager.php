@@ -2,30 +2,24 @@
 
 namespace Akbarjimi\ExcelImporter\Services;
 
+use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Event;
 
 class ImportManager
 {
-    public function import(string $binaryContents, string $originalPath): ExcelFile
+    public function import(string $path, string $driver = 'local'): ExcelFile
     {
-        $tmpDir = storage_path('app/tmp');
+        $fileName = basename($path);
 
-        if (!File::exists($tmpDir)) {
-            File::makeDirectory($tmpDir, recursive: true);
-        }
-
-        $tempPath = $tmpDir . '/' . Str::random(40) . '.xlsx';
-        file_put_contents($tempPath, $binaryContents);
-
-        $e = ExcelFile::create([
-            'file_name' => basename($originalPath),
+        $file = ExcelFile::create([
+            'file_name' => $fileName,
+            'path' => $path,
+            'driver' => $driver,
         ]);
 
-        Event::dispatch(new ExcelUploaded($e->path));
+        Event::dispatch(new ExcelUploaded($file));
 
-        return $e;
+        return $file;
     }
 }
