@@ -1,21 +1,19 @@
 <?php
 
-use Akbarjimi\ExcelImporter\Services\SheetDiscoveryService;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
-
-beforeEach(function () {
-    Storage::fake('local');
-
-    $binary = file_get_contents(__DIR__.'/../stubs/sample.xlsx');
-    Storage::put('imports/sample.xlsx', $binary);
-});
+use Akbarjimi\ExcelImporter\Services\SheetDiscoveryService;
+use Illuminate\Support\Facades\File;
 
 it('discovers sheets from Excel file', function () {
-    $realPath = Storage::disk('local')->path('imports/sample.xlsx');
+    $source = __DIR__ . '/../stubs/sample.xlsx';
+    $dest = storage_path('app/imports/sample.xlsx');
+
+    File::ensureDirectoryExists(dirname($dest));
+    File::copy($source, $dest);
 
     $file = ExcelFile::create([
         'file_name' => 'sample.xlsx',
-        'path' => $realPath,
+        'path' => $dest,
         'driver' => 'local',
     ]);
 
@@ -23,4 +21,6 @@ it('discovers sheets from Excel file', function () {
     $sheets = $service->discover($file);
 
     expect($sheets)->not()->toBeEmpty();
+
+    File::delete($dest);
 });
