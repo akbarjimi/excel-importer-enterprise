@@ -7,12 +7,12 @@ use Akbarjimi\ExcelImporter\Services\RowExtractionService;
 
 class HandleSheetsDiscovered
 {
+    public function __construct(protected RowExtractionService $service) {}
+
     public function handle(SheetsDiscovered $event): void
     {
-        $service = new RowExtractionService();
-
         foreach ($event->sheets as $sheet) {
-            $service->extract($sheet);
+            $this->service->extract($sheet);
         }
     }
 }
