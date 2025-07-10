@@ -20,8 +20,12 @@ class ImportManager
         $tempPath = $tmpDir . '/' . Str::random(40) . '.xlsx';
         file_put_contents($tempPath, $binaryContents);
 
-        return ExcelFile::create([
+        $e = ExcelFile::create([
             'file_name' => basename($originalPath),
         ]);
+
+        Event::dispatch(new ExcelUploaded($e->path));
+
+        return $e;
     }
 }
