@@ -10,6 +10,8 @@ return new class extends Migration {
         Schema::create('excel_files', function (Blueprint $table) {
             $table->id();
             $table->string('file_name');
+            $table->string('path');
+            $table->string('driver')->default('local');
             $table->timestamps();
         });
     }
