@@ -16,6 +16,9 @@ class ExcelImporterServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         Event::listen(ExcelUploaded::class, HandleExcelUploaded::class);
         Event::listen(SheetsDiscovered::class, HandleSheetsDiscovered::class);
+        $this->publishes([
+            __DIR__.'/config/excel-importer.php' => config_path('excel-importer.php'),
+        ], 'config');
     }
 
     public function register(): void
