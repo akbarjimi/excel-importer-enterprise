@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->foreignId('excel_file_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->unsignedInteger('rows_count')->default(0);
-            $table->json('meta')->nullable(); // optional sheet metadata
+            $table->json('meta')->nullable();
             $table->timestamps();
         });
     }
