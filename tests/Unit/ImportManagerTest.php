@@ -1,15 +1,18 @@
 <?php
 
+use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Akbarjimi\ExcelImporter\Services\ImportManager;
 use Illuminate\Support\Facades\Event;
-use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
+use Illuminate\Support\Facades\Storage;
 
-it('stores Excel metadata and dispatches event', function () {
+it('stores metadata and dispatches ExcelUploaded', function () {
     Event::fake();
 
-    $manager = new ImportManager();
-    $file = $manager->import('storage/app/imports/sample.xlsx');
+    $path = 'imports/sample.xlsx';
+    Storage::put($path, 'stub');
+
+    $file = app(ImportManager::class)->import($path);
 
     expect($file)->toBeInstanceOf(ExcelFile::class)
         ->and($file->file_name)->toBe('sample.xlsx');
