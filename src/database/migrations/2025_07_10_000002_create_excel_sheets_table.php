@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('name');
             $table->unsignedInteger('rows_count')->default(0);
             $table->json('meta')->nullable();
+            $table->timestamp('rows_extracted_at')->nullable();
             $table->timestamps();
         });
     }
