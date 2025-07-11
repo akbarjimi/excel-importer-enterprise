@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->json('content');
             $table->boolean('is_processed')->default(false);
             $table->string('content_hash')->nullable()->unique();
+            $table->unsignedInteger('chunk_index')->nullable();
             $table->timestamps();
         });
     }
