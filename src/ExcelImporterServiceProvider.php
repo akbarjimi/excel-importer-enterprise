@@ -20,9 +20,4 @@ class ExcelImporterServiceProvider extends ServiceProvider
             __DIR__.'/config/excel-importer.php' => config_path('excel-importer.php'),
         ], 'config');
     }
-
-    public function register(): void
-    {
-        //
-    }
 }
