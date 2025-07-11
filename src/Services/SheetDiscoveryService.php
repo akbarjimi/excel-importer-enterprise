@@ -4,31 +4,31 @@ namespace Akbarjimi\ExcelImporter\Services;
 
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class SheetDiscoveryService
 {
     public function discover(ExcelFile $file): array
     {
-        $path = storage_path("app/{$file->path}");
+        $spreadsheet = Excel::toArray(null, $file->resolvedPath(), $file->driver)[0] ?? [];
 
-        $spreadsheet = IOFactory::load($path);
-        $sheets = $spreadsheet->getSheetNames();
+        $reader = IOFactory::createReaderForFile($file->resolvedPath());
+        $sheetNames = $reader->listWorksheetNames($file->resolvedPath());
 
         $sheetModels = [];
-
-        foreach ($sheets as $index => $sheetName) {
-            $sheet = $spreadsheet->getSheet($index);
-            $rowCount = $sheet->getHighestRow();
+        foreach ($sheetNames as $index => $name) {
+            /** @var Worksheet $metaSheet */
+            $metaSheet = $reader->listWorksheetInfo($file->resolvedPath())[$index];
+            $rowCount = $metaSheet['totalRows'] ?? 0;
 
             $sheetModels[] = ExcelSheet::create([
                 'excel_file_id' => $file->id,
-                'name' => $sheetName,
+                'name' => $name,
                 'rows_count' => $rowCount,
-                'meta' => json_encode([
-                    'index' => $index,
-                    'columns' => $sheet->getHighestColumn(),
-                ]),
+                'meta' => json_encode(['index' => $index]),
             ]);
         }
 
