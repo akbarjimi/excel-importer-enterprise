@@ -9,10 +9,16 @@ use Illuminate\Support\Facades\Event;
 
 class HandleExcelUploaded
 {
+    public function __construct(
+        protected SheetDiscoveryService $service,
+        protected Dispatcher            $events
+    )
+    {
+    }
+
     public function handle(ExcelUploaded $event): void
     {
-        $sheets = (new SheetDiscoveryService())->discover($event->file);
-
-        Event::dispatch(new SheetsDiscovered(collect($sheets)));
+        $sheets = $this->service->discover($event->file);
+        $this->events->dispatch(new SheetsDiscovered(collect($sheets)));
     }
 }
