@@ -10,7 +10,7 @@ it('extracts rows and sets rows_extracted_at', function () {
     $abs = storage_path('app/' . $rel);
     File::ensureDirectoryExists(dirname($abs));
 
-    $stubPath = __DIR__.'/../stubs/two-row.xlsx';
+    $stubPath = __DIR__ . '/../stubs/two-row.xlsx';
     File::copy($stubPath, $abs);
 
     $file = ExcelFile::create([
