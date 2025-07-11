@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class ExcelRow extends Model
 {
     protected $fillable = ['excel_sheet_id', 'content', 'is_processed', 'content_hash', 'chunk_index',];
+
+    public function sheet()
+    {
+        return $this->belongsTo(ExcelSheet::class);
+    }
 }
