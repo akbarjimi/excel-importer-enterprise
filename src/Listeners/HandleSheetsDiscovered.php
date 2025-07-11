@@ -7,7 +7,9 @@ use Akbarjimi\ExcelImporter\Services\RowExtractionService;
 
 class HandleSheetsDiscovered
 {
-    public function __construct(protected RowExtractionService $service) {}
+    public function __construct(protected RowExtractionService $service)
+    {
+    }
 
     public function handle(SheetsDiscovered $event): void
     {

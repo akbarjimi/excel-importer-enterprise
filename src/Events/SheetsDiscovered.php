@@ -6,5 +6,7 @@ use Illuminate\Support\Collection;
 
 class SheetsDiscovered
 {
-    public function __construct(public Collection $sheets) {}
+    public function __construct(public Collection $sheets)
+    {
+    }
 }
