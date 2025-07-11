@@ -4,21 +4,26 @@ namespace Akbarjimi\ExcelImporter\Services;
 
 use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Event;
 
 class ImportManager
 {
-    public function import(string $path, string $driver = 'local'): ExcelFile
+    public function __construct(private Dispatcher $events)
     {
-        $fileName = basename($path);
+    }
+
+    public function import(string $relativePath, string $driver = null): ExcelFile
+    {
+        $driver ??= config('excel-importer.default_disk', 'local');
 
         $file = ExcelFile::create([
-            'file_name' => $fileName,
-            'path' => $path,
+            'file_name' => basename($relativePath),
+            'path' => $relativePath,
             'driver' => $driver,
         ]);
 
-        Event::dispatch(new ExcelUploaded($file));
+        $this->events->dispatch(new ExcelUploaded($file));
 
         return $file;
     }
