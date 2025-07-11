@@ -4,14 +4,14 @@ namespace Akbarjimi\ExcelImporter\Listeners;
 
 use Akbarjimi\ExcelImporter\Events\FileExtractionCompleted;
 use Akbarjimi\ExcelImporter\Events\ProcessRowsChunk;
-use Akbarjimi\ExcelImporter\Services\ChunkingService;
+use Akbarjimi\ExcelImporter\Services\ChunkService;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class HandleFileExtractionCompleted
 {
     public function __construct(
-        protected ChunkingService $chunking,
-        protected Dispatcher      $events
+        protected ChunkService $chunking,
+        protected Dispatcher   $events
     )
     {
     }
