@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('file_name');
             $table->string('path');
             $table->string('driver')->default('local');
+            $table->enum('status', ['pending', 'reading', 'read', 'processing', 'done', 'failed'])->default('pending');
             $table->timestamps();
         });
     }
