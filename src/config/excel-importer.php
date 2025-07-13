@@ -19,7 +19,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Directory where temporary Excel files are stored before processing.
-    | Make sure this path is writable and not publicly accessible.
+    | This path must be writable and should not be publicly accessible.
     |
     */
     'tmp_path' => env('EXCEL_IMPORTER_TMP_PATH', storage_path('app/tmp')),
@@ -30,7 +30,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Whether event listeners and jobs should be dispatched to the queue.
-    | Set to false for local development or synchronous testing.
+    | Set to false for synchronous development/test execution.
     |
     */
     'queue_jobs' => env('EXCEL_IMPORTER_QUEUE_JOBS', true),
@@ -51,9 +51,49 @@ return [
     | Default Disk for Excel Files
     |--------------------------------------------------------------------------
     |
-    | This value sets the default disk used for file reading.
-    | Should match a disk defined in config/filesystems.php.
+    | The default filesystem disk used to access stored Excel files.
+    | Must be defined in config/filesystems.php.
     |
     */
     'default_disk' => env('EXCEL_IMPORTER_DISK', 'local'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Sheet Configuration Path
+    |--------------------------------------------------------------------------
+    |
+    | Directory where per-sheet config files live (map + validate logic).
+    | You can cache these files in production for performance.
+    |
+    */
+    'sheet_config_path' => base_path('excel-sheet-configs'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Sheet Configuration Cache Key
+    |--------------------------------------------------------------------------
+    |
+    | Cache key used for storing sheet configuration mapping rules.
+    | You can invalidate this when deploying new sheet types.
+    |
+    */
+    'sheet_config_cache_key' => 'excel_importer_sheet_configs',
+
+    /*
+    |--------------------------------------------------------------------------
+    | File Status States
+    |--------------------------------------------------------------------------
+    |
+    | Enum-style states used for tracking file lifecycle stages.
+    | These should match the DB enum column values.
+    |
+    */
+    'statuses' => [
+        'pending',
+        'reading',
+        'read',
+        'processing',
+        'processed',
+        'failed',
+    ],
 ];
