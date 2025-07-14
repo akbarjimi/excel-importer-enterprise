@@ -2,36 +2,42 @@
 
 namespace Akbarjimi\ExcelImporter\Services;
 
+use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
-use Maatwebsite\Excel\Facades\Excel;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Akbarjimi\ExcelImporter\Support\ExcelReaderAdapter;
+use Illuminate\Support\Facades\Log;
 
-class SheetDiscoveryService
+readonly class SheetDiscoveryService
 {
+    public function __construct(
+        private ExcelReaderAdapter $readerAdapter
+    )
+    {
+    }
+
     public function discover(ExcelFile $file): array
     {
-        $spreadsheet = Excel::toArray(null, $file->resolvedPath(), $file->driver)[0] ?? [];
+        try {
+            $sheetInfoList = $this->readerAdapter->getSheetMetadata($file);
+            $sheetModels = [];
 
-        $reader = IOFactory::createReaderForFile($file->resolvedPath());
-        $sheetNames = $reader->listWorksheetNames($file->resolvedPath());
+            foreach ($sheetInfoList as $index => $sheetMeta) {
+                $sheetModels[] = ExcelSheet::create([
+                    'excel_file_id' => $file->id,
+                    'name' => $sheetMeta['name'],
+                    'rows_count' => $sheetMeta['totalRows'] ?? 0,
+                    'meta' => json_encode(['index' => $index]),
+                ]);
+            }
 
-        $sheetModels = [];
-        foreach ($sheetNames as $index => $name) {
-            /** @var Worksheet $metaSheet */
-            $metaSheet = $reader->listWorksheetInfo($file->resolvedPath())[$index];
-            $rowCount = $metaSheet['totalRows'] ?? 0;
+            $file->update(['status' => ExcelFileStatus::READ]);
 
-            $sheetModels[] = ExcelSheet::create([
-                'excel_file_id' => $file->id,
-                'name' => $name,
-                'rows_count' => $rowCount,
-                'meta' => json_encode(['index' => $index]),
-            ]);
+            return $sheetModels;
+        } catch (\Throwable $e) {
+            Log::error('Sheet discovery failed: ' . $e->getMessage());
+            $file->update(['status' => ExcelFileStatus::FAILED]);
+            return [];
         }
-
-        return $sheetModels;
     }
 }
