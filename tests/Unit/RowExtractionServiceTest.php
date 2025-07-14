@@ -5,17 +5,20 @@ use Akbarjimi\ExcelImporter\Services\RowExtractionService;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-it('extracts rows and sets rows_extracted_at', function () {
-    $rel = 'imports/two-row.xlsx';
-    $abs = storage_path('app/' . $rel);
-    File::ensureDirectoryExists(dirname($abs));
+beforeEach(function () {
+    Storage::fake('local');
+});
 
-    $stubPath = __DIR__ . '/../stubs/two-row.xlsx';
-    File::copy($stubPath, $abs);
+it('extracts rows and sets rows_extracted_at', function () {
+    $relative = 'imports/two-row.xlsx';
+    $absolute = storage_path('app/' . $relative);
+    File::ensureDirectoryExists(dirname($absolute));
+
+    File::copy(__DIR__ . '/../stubs/two-row.xlsx', $absolute);
 
     $file = ExcelFile::create([
         'file_name' => 'two-row.xlsx',
-        'path' => $rel,
+        'path' => $relative,
         'driver' => 'local',
     ]);
 
@@ -24,7 +27,8 @@ it('extracts rows and sets rows_extracted_at', function () {
         'rows_count' => 2,
     ]);
 
-    $inserted = app(RowExtractionService::class)->extract($sheet);
+    $service = app(RowExtractionService::class);
+    $inserted = $service->extract($sheet);
 
     $sheet->refresh();
 
