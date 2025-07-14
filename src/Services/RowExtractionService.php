@@ -35,10 +35,8 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
         Excel::import($this, $sheet->file->resolvedPath(), $sheet->file->driver);
 
         $sheet->update(['rows_extracted_at' => now()]);
-        $sheet->file->update([
-            'status' => 'read',
-            'rows_extracted' => $this->inserted,
-        ]);
+        $sheet->file->update(['status' => ExcelFileStatus::READ]);
+        $sheet->file->update(['rows_extracted' => $this->inserted,]);
 
         event(new RowsExtracted($sheet, $this->inserted));
 

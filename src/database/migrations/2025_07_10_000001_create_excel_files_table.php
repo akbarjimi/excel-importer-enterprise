@@ -1,5 +1,6 @@
 <?php
 
+use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +13,7 @@ return new class extends Migration {
             $table->string('file_name');
             $table->string('path');
             $table->string('driver')->default('local');
-            $table->enum('status', ['pending', 'reading', 'read', 'processing', 'done', 'failed'])->default('pending');
+            $table->enum('status', array_column(ExcelFileStatus::cases(), 'value'))->default(ExcelFileStatus::PENDING->value);
             $table->timestamps();
         });
     }
