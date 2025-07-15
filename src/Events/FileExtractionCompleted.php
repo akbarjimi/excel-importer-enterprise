@@ -4,6 +4,10 @@ namespace Akbarjimi\ExcelImporter\Events;
 
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
 
+/**
+ * Fired after all sheets and rows for a given Excel file have been extracted.
+ * Can be used to trigger the transition into processing state.
+ */
 readonly class FileExtractionCompleted
 {
     public function __construct(
