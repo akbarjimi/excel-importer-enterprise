@@ -5,20 +5,32 @@ namespace Akbarjimi\ExcelImporter\Listeners;
 use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
 use Akbarjimi\ExcelImporter\Events\SheetsDiscovered;
 use Akbarjimi\ExcelImporter\Services\SheetDiscoveryService;
-use Illuminate\Support\Facades\Event;
+use Akbarjimi\ExcelImporter\Repositories\ExcelSheetRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 
-class HandleExcelUploaded
+/**
+ * Listener: Discover sheets as soon as the file is registered.
+ *
+ * Flow:
+ *   ExcelUploaded  ─▶  HandleExcelUploaded  ─▶  SheetsDiscovered
+ */
+final readonly class HandleExcelUploaded
 {
     public function __construct(
-        protected SheetDiscoveryService $service,
-        protected Dispatcher            $events
-    )
-    {
-    }
+        private SheetDiscoveryService   $discovery,
+        private ExcelSheetRepository    $sheetRepo,
+        private Dispatcher              $events,
+    ) {}
 
     public function handle(ExcelUploaded $event): void
     {
-        $sheets = $this->service->discover($event->file);
-        $this->events->dispatch(new SheetsDiscovered(collect($sheets)));
+        // 1. Discover sheets through adapter‑powered service
+        $sheetDTOs = $this->discovery->discover($event->file);
+
+        // 2. Persist sheet metadata via repository (avoids ActiveRecord in listener)
+        $this->sheetRepo->bulkCreate($event->file->id, $sheetDTOs);
+
+        // 3. Dispatch next pipeline event
+        $this->events->dispatch(new SheetsDiscovered($event->file->id));
     }
 }
