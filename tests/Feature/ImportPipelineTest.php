@@ -2,8 +2,8 @@
 
 use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
-use Akbarjimi\ExcelImporter\Managers\ImportManager;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
+use Akbarjimi\ExcelImporter\Services\ImportManager;
 use Illuminate\Support\Facades\Event;
 
 it('stores Excel file metadata in database', function () {
@@ -13,7 +13,7 @@ it('stores Excel file metadata in database', function () {
 
     Event::fake([ExcelUploaded::class]);
 
-    $manager = new ImportManager(events());
+    $manager = app(ImportManager::class);
     $file = $manager->import($relativePath);
 
     expect($file)
