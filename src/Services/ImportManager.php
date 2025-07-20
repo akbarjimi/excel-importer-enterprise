@@ -8,9 +8,9 @@ use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\DB;
 
-class ImportManager
+readonly class ImportManager
 {
-    public function __construct(private readonly Dispatcher $events)
+    public function __construct(private Dispatcher $events)
     {
     }
 
