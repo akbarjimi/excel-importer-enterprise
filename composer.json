@@ -12,7 +12,8 @@
     "orchestra/testbench": "^10.2",
     "pestphp/pest": "^3.8",
     "pestphp/pest-plugin-laravel": "^3.2",
-    "mockery/mockery": "^1.6"
+    "mockery/mockery": "^1.6",
+    "laravel/pint": "^1.0"
   },
   "config": {
     "platform": {
@@ -35,7 +36,8 @@
     }
   },
   "scripts": {
-    "test": "pest"
+    "test": "pest",
+    "lint": "pint"
   },
   "extra": {
     "laravel": {
