@@ -7,7 +7,6 @@ use Akbarjimi\ExcelImporter\Events\RowsExtracted;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithStartRow;
@@ -17,8 +16,11 @@ use Maatwebsite\Excel\Row;
 class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 {
     private ExcelSheet $sheet;
+
     private array $buffer = [];
+
     private int $inserted = 0;
+
     private int $batchSize;
 
     public function __construct()
@@ -36,7 +38,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 
         $sheet->update(['rows_extracted_at' => now()]);
         $sheet->file->update(['status' => ExcelFileStatus::READ]);
-        $sheet->file->update(['rows_extracted' => $this->inserted,]);
+        $sheet->file->update(['rows_extracted' => $this->inserted]);
 
         event(new RowsExtracted($sheet, $this->inserted));
 
@@ -61,7 +63,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
                 $this->flushBuffer();
             }
         } catch (\Throwable $e) {
-            Log::error('Row extraction failed: ' . $e->getMessage(), ['row' => $row->getIndex()]);
+            Log::error('Row extraction failed: '.$e->getMessage(), ['row' => $row->getIndex()]);
             event(new RowFailed($this->sheet, $row->getIndex(), $e->getMessage()));
         }
     }
@@ -77,7 +79,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
             $this->inserted += count($this->buffer);
             $this->buffer = [];
         } catch (\Throwable $e) {
-            Log::critical('Bulk insert failed: ' . $e->getMessage());
+            Log::critical('Bulk insert failed: '.$e->getMessage());
         }
     }
 

@@ -12,9 +12,7 @@ readonly class SheetDiscoveryService
 {
     public function __construct(
         private ExcelReaderAdapter $readerAdapter
-    )
-    {
-    }
+    ) {}
 
     public function discover(ExcelFile $file): array
     {
@@ -35,8 +33,9 @@ readonly class SheetDiscoveryService
 
             return $sheetModels;
         } catch (\Throwable $e) {
-            Log::error('Sheet discovery failed: ' . $e->getMessage());
+            Log::error('Sheet discovery failed: '.$e->getMessage());
             $file->update(['status' => ExcelFileStatus::FAILED]);
+
             return [];
         }
     }

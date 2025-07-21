@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class ChunkService
 {
-    public function __construct(private readonly Dispatcher $events)
-    {
-    }
+    public function __construct(private readonly Dispatcher $events) {}
 
     public function splitSheetIntoChunks(ExcelSheet $sheet): void
     {
@@ -20,10 +18,11 @@ class ChunkService
         $totalRows = $sheet->rows()->count();
         if ($totalRows === 0) {
             Log::info("Sheet [{$sheet->id}] has no rows to process.");
+
             return;
         }
 
-        $chunkCount = (int)ceil($totalRows / $chunkSize);
+        $chunkCount = (int) ceil($totalRows / $chunkSize);
 
         for ($i = 0; $i < $chunkCount; $i++) {
             $this->events->dispatch(

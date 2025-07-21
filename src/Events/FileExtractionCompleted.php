@@ -14,9 +14,7 @@ readonly class FileExtractionCompleted
         public int $fileId,
         public int $totalSheets,
         public int $totalRows,
-    )
-    {
-    }
+    ) {}
 
     public static function fromFile(ExcelFile $file): self
     {

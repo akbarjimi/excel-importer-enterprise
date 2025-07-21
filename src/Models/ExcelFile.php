@@ -40,12 +40,12 @@ final class ExcelFile extends Model
     public function getReadableStatusAttribute(): string
     {
         return match ($this->status) {
-            ExcelFileStatus::PENDING          => 'File uploaded, no action yet',
-            ExcelFileStatus::READING          => 'File being parsed (sheets & rows)',
-            ExcelFileStatus::ROWS_EXTRACTED   => 'All rows read from Excel',
-            ExcelFileStatus::PROCESSING       => 'Chunks dispatched or in progress',
-            ExcelFileStatus::COMPLETED        => 'All chunks processed successfully',
-            ExcelFileStatus::FAILED           => 'General failure at any stage',
+            ExcelFileStatus::PENDING => 'File uploaded, no action yet',
+            ExcelFileStatus::READING => 'File being parsed (sheets & rows)',
+            ExcelFileStatus::ROWS_EXTRACTED => 'All rows read from Excel',
+            ExcelFileStatus::PROCESSING => 'Chunks dispatched or in progress',
+            ExcelFileStatus::COMPLETED => 'All chunks processed successfully',
+            ExcelFileStatus::FAILED => 'General failure at any stage',
         };
     }
 }

@@ -9,7 +9,7 @@ it('discovers sheets from Excel file', function () {
     $fullPath = storage_path("app/{$storageRelativePath}");
 
     File::ensureDirectoryExists(dirname($fullPath));
-    File::copy(__DIR__ . '/../stubs/sample.xlsx', $fullPath);
+    File::copy(__DIR__.'/../stubs/sample.xlsx', $fullPath);
 
     $file = ExcelFile::create([
         'file_name' => 'sample.xlsx',
@@ -17,7 +17,7 @@ it('discovers sheets from Excel file', function () {
         'driver' => 'local',
     ]);
 
-    $service = new SheetDiscoveryService();
+    $service = new SheetDiscoveryService;
     $sheets = $service->discover($file);
 
     expect($sheets)->not()->toBeEmpty();

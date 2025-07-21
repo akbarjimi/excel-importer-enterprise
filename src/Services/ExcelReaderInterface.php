@@ -2,7 +2,4 @@
 
 namespace Akbarjimi\ExcelImporter\Services;
 
-interface ExcelReaderInterface
-{
-
-}
+interface ExcelReaderInterface {}

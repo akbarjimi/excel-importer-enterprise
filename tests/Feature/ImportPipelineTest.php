@@ -7,7 +7,7 @@ use Akbarjimi\ExcelImporter\Services\ImportManager;
 use Illuminate\Support\Facades\Event;
 
 it('stores Excel file metadata in database', function () {
-    $relativePath = __DIR__ . '/../stubs/1sheet3rows1header.xlsx';
+    $relativePath = __DIR__.'/../stubs/1sheet3rows1header.xlsx';
     $absolutePath = storage_path($relativePath);
     assert(file_exists($absolutePath), "Test file missing at: $absolutePath");
 
@@ -22,5 +22,5 @@ it('stores Excel file metadata in database', function () {
         ->path->toBe($relativePath)
         ->status->toBe(ExcelFileStatus::READING);
 
-    Event::assertDispatched(ExcelUploaded::class, fn($event) => $event->file->id === $file->id);
+    Event::assertDispatched(ExcelUploaded::class, fn ($event) => $event->file->id === $file->id);
 });

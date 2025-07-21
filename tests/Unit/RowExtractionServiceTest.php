@@ -11,10 +11,10 @@ beforeEach(function () {
 
 it('extracts rows and sets rows_extracted_at', function () {
     $relative = 'imports/two-row.xlsx';
-    $absolute = storage_path('app/' . $relative);
+    $absolute = storage_path('app/'.$relative);
     File::ensureDirectoryExists(dirname($absolute));
 
-    File::copy(__DIR__ . '/../stubs/two-row.xlsx', $absolute);
+    File::copy(__DIR__.'/../stubs/two-row.xlsx', $absolute);
 
     $file = ExcelFile::create([
         'file_name' => 'two-row.xlsx',

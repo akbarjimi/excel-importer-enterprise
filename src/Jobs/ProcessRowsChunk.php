@@ -21,9 +21,7 @@ class ProcessRowsChunk implements ShouldQueue
         public readonly int $sheetId,
         public readonly int $chunkIndex,
         public readonly int $chunkSize = 1000
-    )
-    {
-    }
+    ) {}
 
     public function handle(SheetRowValidator $validator, SheetRowMapper $mapper): void
     {

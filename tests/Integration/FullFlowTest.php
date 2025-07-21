@@ -5,13 +5,12 @@ use Akbarjimi\ExcelImporter\Services\ImportManager;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 it('imports, discovers, extracts rows, and fires FileExtractionCompleted', function () {
     Event::fake([FileExtractionCompleted::class]);
 
     $rel = 'imports/big.xlsx';
-    $abs = storage_path('app/' . $rel);
+    $abs = storage_path('app/'.$rel);
     File::ensureDirectoryExists(dirname($abs));
     File::copy(base_path('tests/stubs/big.xlsx'), $abs);
 

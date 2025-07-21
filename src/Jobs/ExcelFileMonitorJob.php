@@ -2,7 +2,4 @@
 
 namespace Akbarjimi\ExcelImporter\Jobs;
 
-class ExcelFileMonitorJob
-{
-
-}
+class ExcelFileMonitorJob {}

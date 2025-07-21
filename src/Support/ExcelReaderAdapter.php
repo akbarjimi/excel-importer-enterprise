@@ -12,6 +12,7 @@ class ExcelReaderAdapter
     public function getSheetMetadata(ExcelFile $file): array
     {
         $reader = IOFactory::createReaderForFile($file->resolvedPath());
+
         return $reader->listWorksheetInfo($file->resolvedPath());
     }
 }

@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 readonly class ImportManager
 {
-    public function __construct(private Dispatcher $events)
-    {
-    }
+    public function __construct(private Dispatcher $events) {}
 
     public function import(string $relativePath, ?string $driver = null): ExcelFile
     {

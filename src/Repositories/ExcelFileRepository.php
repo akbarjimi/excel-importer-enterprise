@@ -3,8 +3,6 @@
 namespace Akbarjimi\ExcelImporter\Repositories;
 
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 class ExcelFileRepository
 {

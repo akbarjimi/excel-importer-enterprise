@@ -15,8 +15,8 @@ use Akbarjimi\ExcelImporter\Services\RowExtractionService;
 final readonly class HandleSheetsDiscovered
 {
     public function __construct(
-        private RowExtractionService   $extractor,
-        private ExcelSheetRepository   $sheetRepo,
+        private RowExtractionService $extractor,
+        private ExcelSheetRepository $sheetRepo,
     ) {}
 
     public function handle(SheetsDiscovered $event): void

@@ -4,8 +4,8 @@ namespace Akbarjimi\ExcelImporter\Listeners;
 
 use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
 use Akbarjimi\ExcelImporter\Events\SheetsDiscovered;
-use Akbarjimi\ExcelImporter\Services\SheetDiscoveryService;
 use Akbarjimi\ExcelImporter\Repositories\ExcelSheetRepository;
+use Akbarjimi\ExcelImporter\Services\SheetDiscoveryService;
 use Illuminate\Contracts\Events\Dispatcher;
 
 /**
@@ -17,9 +17,9 @@ use Illuminate\Contracts\Events\Dispatcher;
 final readonly class HandleExcelUploaded
 {
     public function __construct(
-        private SheetDiscoveryService   $discovery,
-        private ExcelSheetRepository    $sheetRepo,
-        private Dispatcher              $events,
+        private SheetDiscoveryService $discovery,
+        private ExcelSheetRepository $sheetRepo,
+        private Dispatcher $events,
     ) {}
 
     public function handle(ExcelUploaded $event): void

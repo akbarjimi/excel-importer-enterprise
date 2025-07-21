@@ -9,12 +9,10 @@ use Akbarjimi\ExcelImporter\Services\ChunkService;
 class TriggerChunkJobs
 {
     public function __construct(
-        private ChunkService        $chunkService,
+        private ChunkService $chunkService,
         private ExcelFileRepository $sheetRepo,
         private ExcelFileRepository $fileRepo,
-    )
-    {
-    }
+    ) {}
 
     public function handle(RowsExtracted $event): void
     {

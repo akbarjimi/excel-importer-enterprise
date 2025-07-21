@@ -2,7 +2,4 @@
 
 namespace Akbarjimi\ExcelImporter\Services;
 
-class SpoutAdapter
-{
-
-}
+class SpoutAdapter {}

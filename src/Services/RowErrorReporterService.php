@@ -2,7 +2,4 @@
 
 namespace Akbarjimi\ExcelImporter\Services;
 
-class RowErrorReporterService
-{
-
-}
+class RowErrorReporterService {}

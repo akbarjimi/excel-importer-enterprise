@@ -17,12 +17,12 @@ class ExcelImporterServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
         Event::listen(ExcelUploaded::class, HandleExcelUploaded::class);
         Event::listen(SheetsDiscovered::class, HandleSheetsDiscovered::class);
         Event::listen(FileExtractionCompleted::class, HandleFileExtractionCompleted::class);
         $this->publishes([
-            __DIR__ . '/config/excel-importer.php' => config_path('excel-importer.php'),
+            __DIR__.'/config/excel-importer.php' => config_path('excel-importer.php'),
         ], 'config');
     }
 
