@@ -10,15 +10,16 @@ use Illuminate\Support\Facades\DB;
 
 readonly class ImportManager
 {
-    public function __construct(private Dispatcher $events) {}
+    public function __construct(private Dispatcher $events)
+    {
+    }
 
     public function import(string $relativePath, ?string $driver = null): ExcelFile
     {
-        $driver ??= config('excel-importer.default_disk', 'local');
+        $driver ??= config('excel-importer.default_disk');
 
         return DB::transaction(function () use ($relativePath, $driver) {
 
-            /** @var ExcelFile $file */
             $file = ExcelFile::create([
                 'file_name' => basename($relativePath),
                 'path' => $relativePath,
@@ -26,12 +27,9 @@ readonly class ImportManager
                 'status' => ExcelFileStatus::PENDING,
             ]);
 
-            // Immediate transition → READING so workers know they can start extraction
-            $file->updateQuietly(['status' => ExcelFileStatus::READING]);
-
             $this->events->dispatch(new ExcelUploaded($file));
 
-            return $file->fresh();
+            return $file;
         });
     }
 }
