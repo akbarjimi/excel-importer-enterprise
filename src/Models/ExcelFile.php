@@ -32,7 +32,7 @@ final class ExcelFile extends Model
     // Accessors / Helpers (read‑only)
     // ---------------------------------------------------------------------
 
-    public function getResolvedPathAttribute(): string
+    public function resolvedPath(): string
     {
         return storage_path($this->path);
     }
