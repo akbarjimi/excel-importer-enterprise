@@ -34,7 +34,7 @@ final class ExcelFile extends Model
 
     public function resolvedPath(): string
     {
-        return storage_path($this->path);
+        return storage_path($this->path,$this->driver);
     }
 
     public function getReadableStatusAttribute(): string
