@@ -34,12 +34,15 @@ it('stores Excel sheet metadata in database after file is uploaded', function ()
     $manager = app(ImportManager::class);
     $file = $manager->import($relativePath);
 
+    assert($absolutePath === $file->resolvedPath());
+    assert(file_exists($file->resolvedPath()), "2. Test file missing at: $absolutePath");
+
     $sheets = ExcelSheet::where('excel_file_id', $file->id)->get();
-
     expect($sheets)->not->toBeEmpty();
-    expect($sheets->first()->name)->toBeString();
     expect($sheets->count())->toBeGreaterThan(0);
-    expect($sheets->first()->rows_count)->toBeGreaterThan(0);
-    expect($sheets->first()->status)->toBe(ExcelSheetStatus::PENDING->value);
 
+    $firstSheet = $sheets->first();
+    expect($firstSheet->name)->toBeString();
+    expect($firstSheet->rows_count)->toBeGreaterThan(0);
+    expect($firstSheet->status)->toBe(ExcelSheetStatus::PENDING->value);
 });
