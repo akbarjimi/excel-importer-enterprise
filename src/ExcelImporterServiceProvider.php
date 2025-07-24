@@ -30,5 +30,10 @@ class ExcelImporterServiceProvider extends ServiceProvider
     {
         $this->app->bind(ChunkService::class);
         $this->app->bind(RowExtractionService::class);
+
+        // This is the crucial line for package config loading
+        $this->mergeConfigFrom(
+            __DIR__.'/config/excel-importer.php', 'excel-importer'
+        );
     }
 }
