@@ -21,7 +21,7 @@ it('stores Excel file metadata in database', function () {
         ->toBeInstanceOf(ExcelFile::class)
         ->file_name->toBe('1sheet3rows1header.xlsx')
         ->path->toBe($relativePath)
-        ->status->toBe(ExcelFileStatus::READING);
+        ->status->toBe(ExcelFileStatus::PENDING);
 
     Event::assertDispatched(ExcelUploaded::class, fn ($event) => $event->file->id === $file->id);
 });
