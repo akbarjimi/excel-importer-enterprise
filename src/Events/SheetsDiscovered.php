@@ -11,6 +11,6 @@ use Illuminate\Support\Collection;
 readonly class SheetsDiscovered
 {
     public function __construct(
-        public Collection $sheets // Collection of SheetMeta DTOs or raw arrays
+        public int $fileId
     ) {}
 }
