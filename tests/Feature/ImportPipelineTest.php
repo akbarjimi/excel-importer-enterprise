@@ -10,47 +10,30 @@ use Akbarjimi\ExcelImporter\Services\ImportManager;
 use Illuminate\Support\Facades\Event;
 use function Pest\Laravel\assertDatabaseHas;
 
-// ─────────────────────────────────────────────────────────────
-// ✅ Global setup for Excel Importer tests
-// ─────────────────────────────────────────────────────────────
-
 beforeEach(function () {
     $this->stubFileName = '1sheet3rows1header.xlsx';
 
-    // Relative path inside tests/stubs
     $this->sourcePath = __DIR__ . '/../stubs/' . $this->stubFileName;
 
-    // Where to copy it into the Laravel app storage
     $this->relativeTargetPath = 'testing/' . $this->stubFileName;
     $this->absoluteTargetPath = storage_path($this->relativeTargetPath);
 
-    // Ensure storage directory exists
     if (!is_dir(dirname($this->absoluteTargetPath))) {
         mkdir(dirname($this->absoluteTargetPath), 0777, true);
     }
 
-    // Fresh copy for every test run
     copy($this->sourcePath, $this->absoluteTargetPath);
 
     expect(file_exists($this->absoluteTargetPath))
         ->toBeTrue("Failed to copy test Excel file into storage: {$this->absoluteTargetPath}");
 });
 
-// ─────────────────────────────────────────────────────────────
-// ✅ Test 1: Excel file metadata is correctly stored
-// ─────────────────────────────────────────────────────────────
-
 it('stores Excel file metadata in database', function () {
     Event::fake([ExcelUploaded::class]);
 
-    dump("📦 Using file: {$this->relativeTargetPath}");
-
-    /** @var ImportManager $manager */
     $manager = app(ImportManager::class);
 
     $file = $manager->import($this->relativeTargetPath);
-
-    dump("🗂️ File imported, DB ID: {$file->id}, Name: {$file->file_name}");
 
     expect($file)
         ->toBeInstanceOf(ExcelFile::class)
@@ -65,8 +48,6 @@ it('stores Excel file metadata in database', function () {
     ]);
 
     Event::assertDispatched(ExcelUploaded::class, fn($event) => $event->file->id === $file->id);
-
-    dump("✅ Event dispatched for ExcelUploaded with file ID: {$file->id}");
 });
 
 // ─────────────────────────────────────────────────────────────
