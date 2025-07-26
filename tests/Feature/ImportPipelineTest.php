@@ -12,6 +12,7 @@ use function Pest\Laravel\assertDatabaseHas;
 
 beforeEach(function () {
     $this->stubFileName = '1sheet3rows1header.xlsx';
+    $this->driver = config('excel-importer.default_disk');
 
     $this->sourcePath = __DIR__ . '/../stubs/' . $this->stubFileName;
 
