@@ -51,36 +51,19 @@ it('stores Excel file metadata in database', function () {
     Event::assertDispatched(ExcelUploaded::class, fn($event) => $event->file->id === $file->id);
 });
 
-// ─────────────────────────────────────────────────────────────
-// ✅ Test 2: Excel sheet metadata is stored after file upload
-// ─────────────────────────────────────────────────────────────
-
 it('stores Excel sheet metadata in database after file is uploaded', function () {
     Event::fake([SheetsDiscovered::class]);
-    /** @var ImportManager $manager */
     $manager = app(ImportManager::class);
-
-    dump("📥 Running import pipeline for: {$this->relativeTargetPath}");
 
     $file = $manager->import($this->relativeTargetPath);
 
-    dump("🧾 File import finished. File ID: {$file->id}");
-
     $sheets = ExcelSheet::where('excel_file_id', $file->id)->get();
-
-    dump("🧾 Sheet records fetched from DB: {$sheets->count()}");
 
     expect($sheets)
         ->not->toBeEmpty()
         ->count()->toBeGreaterThan(0);
 
     $firstSheet = $sheets->first();
-
-    dump([
-        '🧾 First Sheet Name' => $firstSheet->name,
-        'Rows Count' => $firstSheet->rows_count,
-        'Status' => $firstSheet->status,
-    ]);
 
     expect($firstSheet->name)->toBeString()->not->toBeEmpty();
     expect($firstSheet->rows_count)->toBeGreaterThan(0);
