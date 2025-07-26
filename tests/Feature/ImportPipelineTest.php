@@ -8,18 +8,19 @@ use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
 use Akbarjimi\ExcelImporter\Services\ImportManager;
 use Illuminate\Support\Facades\Event;
+
 use function Pest\Laravel\assertDatabaseHas;
 
 beforeEach(function () {
     $this->stubFileName = '1sheet3rows1header.xlsx';
     $this->driver = config('excel-importer.default_disk');
 
-    $this->sourcePath = __DIR__ . '/../stubs/' . $this->stubFileName;
+    $this->sourcePath = __DIR__.'/../stubs/'.$this->stubFileName;
 
-    $this->relativeTargetPath = 'testing/' . $this->stubFileName;
+    $this->relativeTargetPath = 'testing/'.$this->stubFileName;
     $this->absoluteTargetPath = Storage::disk($this->driver)->path($this->relativeTargetPath);
 
-    if (!is_dir(dirname($this->absoluteTargetPath))) {
+    if (! is_dir(dirname($this->absoluteTargetPath))) {
         mkdir(dirname($this->absoluteTargetPath), 0777, true);
     }
 
@@ -48,7 +49,7 @@ it('stores Excel file metadata in database', function () {
         'file_name' => $this->stubFileName,
     ]);
 
-    Event::assertDispatched(ExcelUploaded::class, fn($event) => $event->file->id === $file->id);
+    Event::assertDispatched(ExcelUploaded::class, fn ($event) => $event->file->id === $file->id);
 });
 
 it('stores Excel sheet metadata in database after file is uploaded', function () {
