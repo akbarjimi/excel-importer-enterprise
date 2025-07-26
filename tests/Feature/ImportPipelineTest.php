@@ -16,7 +16,7 @@ beforeEach(function () {
     $this->sourcePath = __DIR__ . '/../stubs/' . $this->stubFileName;
 
     $this->relativeTargetPath = 'testing/' . $this->stubFileName;
-    $this->absoluteTargetPath = storage_path($this->relativeTargetPath);
+    $this->absoluteTargetPath = Storage::disk($this->driver)->path($this->relativeTargetPath);
 
     if (!is_dir(dirname($this->absoluteTargetPath))) {
         mkdir(dirname($this->absoluteTargetPath), 0777, true);
