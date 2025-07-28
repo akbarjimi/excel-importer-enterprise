@@ -2,6 +2,7 @@
 
 namespace Akbarjimi\ExcelImporter\Services;
 
+use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Akbarjimi\ExcelImporter\Events\RowFailed;
 use Akbarjimi\ExcelImporter\Events\RowsExtracted;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
@@ -16,31 +17,33 @@ use Maatwebsite\Excel\Row;
 class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 {
     private ExcelSheet $sheet;
-
     private array $buffer = [];
-
     private int $inserted = 0;
-
     private int $batchSize;
 
     public function __construct()
     {
-        $this->batchSize = config('excel-importer.insert_batch_size', 100); // customizable
+        $this->batchSize = config('excel-importer.insert_batch_size', 100);
     }
 
     public function extract(ExcelSheet $sheet): int
     {
         $this->sheet = $sheet;
+        $this->setFileStatus(ExcelFileStatus::READING);
 
-        $sheet->file->update(['status' => 'reading']);
+        try {
+            Excel::import($this, $sheet->file->resolvedPath(), $sheet->file->driver);
 
-        Excel::import($this, $sheet->file->resolvedPath(), $sheet->file->driver);
+            $sheet->update(['rows_extracted_at' => now()]);
+            $this->setFileStatus(ExcelFileStatus::ROWS_EXTRACTED);
+            $sheet->file->update(['rows_extracted' => $this->inserted]);
 
-        $sheet->update(['rows_extracted_at' => now()]);
-        $sheet->file->update(['status' => ExcelFileStatus::READ]);
-        $sheet->file->update(['rows_extracted' => $this->inserted]);
-
-        event(new RowsExtracted($sheet, $this->inserted));
+            event(new RowsExtracted($sheet, $this->inserted));
+        } catch (\Throwable $e) {
+            throw_if(app()->isLocal(), $e);
+            Log::critical('Excel import failed: ' . $e->getMessage(), ['sheet_id' => $sheet->id]);
+            $this->setFileStatus(ExcelFileStatus::FAILED);
+        }
 
         return $this->inserted;
     }
@@ -63,7 +66,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
                 $this->flushBuffer();
             }
         } catch (\Throwable $e) {
-            Log::error('Row extraction failed: '.$e->getMessage(), ['row' => $row->getIndex()]);
+            Log::error("Row extraction failed at row {$row->getIndex()}: {$e->getMessage()}");
             event(new RowFailed($this->sheet, $row->getIndex(), $e->getMessage()));
         }
     }
@@ -77,15 +80,16 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
         try {
             DB::table('excel_rows')->insert($this->buffer);
             $this->inserted += count($this->buffer);
-            $this->buffer = [];
         } catch (\Throwable $e) {
-            Log::critical('Bulk insert failed: '.$e->getMessage());
+            Log::critical('Bulk insert failed: ' . $e->getMessage(), ['sheet_id' => $this->sheet->id]);
+        } finally {
+            $this->buffer = [];
         }
     }
 
-    public function __destruct()
+    private function setFileStatus(ExcelFileStatus $status): void
     {
-        $this->flushBuffer();
+        $this->sheet->file->update(['status' => $status->value]);
     }
 
     public function chunkSize(): int
@@ -96,5 +100,10 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
     public function startRow(): int
     {
         return 1;
+    }
+
+    public function __destruct()
+    {
+        $this->flushBuffer();
     }
 }
