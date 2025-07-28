@@ -3,7 +3,7 @@
 namespace Akbarjimi\ExcelImporter\Listeners;
 
 use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
-use Akbarjimi\ExcelImporter\Events\SheetsDiscovered;
+use Akbarjimi\ExcelImporter\Events\SheetDiscovered;
 use Akbarjimi\ExcelImporter\Repositories\ExcelSheetRepository;
 use Akbarjimi\ExcelImporter\Services\SheetDiscoveryService;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -31,6 +31,6 @@ final readonly class HandleExcelUploaded
         $this->sheetRepo->bulkCreate($event->file->id, $sheetDTOs);
 
         // 3. Dispatch next pipeline event
-        $this->events->dispatch(new SheetsDiscovered($event->file->id));
+        $this->events->dispatch(new SheetDiscovered($event->file->id));
     }
 }
