@@ -2,31 +2,27 @@
 
 namespace Akbarjimi\ExcelImporter\Listeners;
 
-use Akbarjimi\ExcelImporter\Events\SheetsDiscovered;
+use Akbarjimi\ExcelImporter\Events\AllSheetsDispatched;
+use Akbarjimi\ExcelImporter\Events\SheetDiscovered;
 use Akbarjimi\ExcelImporter\Repositories\ExcelSheetRepository;
-use Akbarjimi\ExcelImporter\Services\RowExtractionService;
 
-/**
- * Listener: Kick off row extraction for each discovered sheet.
- *
- * Flow:
- *   SheetsDiscovered  ─▶  HandleSheetsDiscovered  ─▶  RowsExtracted (per sheet)
- */
 final readonly class HandleSheetsDiscovered
 {
     public function __construct(
-        private RowExtractionService $extractor,
         private ExcelSheetRepository $sheetRepo,
-    ) {}
-
-    public function handle(SheetsDiscovered $event): void
+    )
     {
-        // Pull fresh sheet models through the repo
-        $sheets = $this->sheetRepo->getByFileId($event->fileId);
+    }
 
-        foreach ($sheets as $sheet) {
-            // RowExtractionService fires RowsExtracted internally
-            $this->extractor->extract($sheet);
+    public function handle(SheetDiscovered $event): void
+    {
+        $sheets = $this->sheetRepo->getByFileId($event->fileId);
+        $lastIndex = $sheets->count() - 1;
+
+        foreach ($sheets as $i => $sheet) {
+            event(new SheetDiscovered($sheet, $i === $lastIndex));
         }
+
+        event(new AllSheetsDispatched($sheets->first()->file));
     }
 }
