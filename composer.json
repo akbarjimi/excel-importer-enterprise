@@ -5,8 +5,11 @@
   "license": "MIT",
   "require": {
     "php": "^8.4",
-    "illuminate/support": "^12.0",
-    "maatwebsite/excel": "^3.1"
+    "illuminate/support": "^12.0"
+  },
+  "suggest": {
+    "maatwebsite/excel": "Laravel Excel driver",
+    "openspout/openspout": "Spout engine for large files"
   },
   "require-dev": {
     "orchestra/testbench": "^10.2",
@@ -14,16 +17,6 @@
     "pestphp/pest-plugin-laravel": "^3.2",
     "mockery/mockery": "^1.6",
     "laravel/pint": "^1.0"
-  },
-  "config": {
-    "platform": {
-      "php": "8.4.5"
-    },
-    "allow-plugins": {
-      "pestphp/pest-plugin": true
-    },
-    "preferred-install": "dist",
-    "sort-packages": true
   },
   "autoload": {
     "psr-4": {
@@ -34,6 +27,16 @@
     "psr-4": {
       "Akbarjimi\\ExcelImporter\\Tests\\": "tests/"
     }
+  },
+  "config": {
+    "platform": {
+      "php": "8.4.5"
+    },
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    },
+    "preferred-install": "dist",
+    "sort-packages": true
   },
   "scripts": {
     "test": "pest",
