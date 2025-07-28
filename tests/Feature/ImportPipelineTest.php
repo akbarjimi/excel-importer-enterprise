@@ -70,3 +70,28 @@ it('stores Excel sheet metadata in database after file is uploaded', function ()
     expect($firstSheet->rows_count)->toBeGreaterThan(0);
     expect($firstSheet->status)->toBe(ExcelSheetStatus::PENDING->value);
 });
+
+it('extracts rows and fires event after uploading an Excel file', function () {
+    Event::fake([RowsExtracted::class]);
+
+    $stubFile = __DIR__.'/../stubs/1sheet3rows1header.xlsx';
+    $relativePath = 'testing/1sheet3rows1header.xlsx';
+    Storage::disk('local')->put($relativePath, file_get_contents($stubFile));
+
+    $file = ExcelFile::factory()->create([
+        'path' => $relativePath,
+        'status' => 'uploaded',
+    ]);
+
+    event(new ExcelUploaded($file));
+    $this->artisan('queue:work --once');
+
+    $sheet = ExcelSheet::first();
+    expect($sheet)->not->toBeNull();
+    expect($sheet->rows_extracted_at)->not->toBeNull();
+
+    $rows = ExcelRow::all();
+    expect($rows)->toHaveCount(3);
+
+    Event::assertDispatched(RowsExtracted::class);
+});
