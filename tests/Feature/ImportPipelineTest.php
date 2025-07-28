@@ -3,7 +3,7 @@
 use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Akbarjimi\ExcelImporter\Enums\ExcelSheetStatus;
 use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
-use Akbarjimi\ExcelImporter\Events\SheetsDiscovered;
+use Akbarjimi\ExcelImporter\Events\SheetDiscovered;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
 use Akbarjimi\ExcelImporter\Services\ImportManager;
@@ -53,7 +53,7 @@ it('stores Excel file metadata in database', function () {
 });
 
 it('stores Excel sheet metadata in database after file is uploaded', function () {
-    Event::fake([SheetsDiscovered::class]);
+    Event::fake([SheetDiscovered::class]);
     $manager = app(ImportManager::class);
 
     $file = $manager->import($this->relativeTargetPath);
