@@ -24,6 +24,6 @@ final readonly class HandleExcelUploaded
 
         $this->sheetRepo->bulkCreate($event->file->id, $sheetDTOs);
 
-        $this->events->dispatch(new SheetsDiscovered($event->file->id));
+        event(new SheetsDiscovered($event->file->id));
     }
 }
