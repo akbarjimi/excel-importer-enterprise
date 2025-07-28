@@ -4,7 +4,7 @@ namespace Akbarjimi\ExcelImporter;
 
 use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
 use Akbarjimi\ExcelImporter\Events\FileExtractionCompleted;
-use Akbarjimi\ExcelImporter\Events\SheetsDiscovered;
+use Akbarjimi\ExcelImporter\Events\SheetDiscovered;
 use Akbarjimi\ExcelImporter\Listeners\HandleExcelUploaded;
 use Akbarjimi\ExcelImporter\Listeners\HandleFileExtractionCompleted;
 use Akbarjimi\ExcelImporter\Listeners\HandleSheetsDiscovered;
@@ -19,7 +19,7 @@ class ExcelImporterServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
         Event::listen(ExcelUploaded::class, HandleExcelUploaded::class);
-        Event::listen(SheetsDiscovered::class, HandleSheetsDiscovered::class);
+        Event::listen(SheetDiscovered::class, HandleSheetsDiscovered::class);
         Event::listen(FileExtractionCompleted::class, HandleFileExtractionCompleted::class);
         $this->publishes([
             __DIR__.'/config/excel-importer.php' => config_path('excel-importer.php'),
