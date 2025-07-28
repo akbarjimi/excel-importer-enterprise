@@ -25,7 +25,7 @@ readonly class ImportManager
                 'status' => ExcelFileStatus::PENDING,
             ]);
 
-            $this->events->dispatch(new ExcelUploaded($file));
+            event(new ExcelUploaded($file));
 
             return $file;
         });

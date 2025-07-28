@@ -25,7 +25,7 @@ class ChunkService
         $chunkCount = (int) ceil($totalRows / $chunkSize);
 
         for ($i = 0; $i < $chunkCount; $i++) {
-            $this->events->dispatch(
+            event(
                 new ProcessRowsChunk(
                     sheetId: $sheet->id,
                     chunkIndex: $i,
