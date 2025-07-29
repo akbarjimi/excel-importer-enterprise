@@ -13,7 +13,6 @@ final readonly class HandleSheetsDiscovered
     public function __construct(
         private ExcelSheetRepository  $sheetRepo,
         private SheetDiscoveryService $discovery,
-        private Dispatcher            $events,
     )
     {
     }

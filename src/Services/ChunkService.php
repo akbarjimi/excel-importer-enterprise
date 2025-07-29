@@ -4,12 +4,11 @@ namespace Akbarjimi\ExcelImporter\Services;
 
 use Akbarjimi\ExcelImporter\Events\ProcessRowsChunk;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Log;
 
 class ChunkService
 {
-    public function __construct(private readonly Dispatcher $events) {}
+    public function __construct() {}
 
     public function splitSheetIntoChunks(ExcelSheet $sheet): void
     {

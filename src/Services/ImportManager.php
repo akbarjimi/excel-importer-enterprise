@@ -5,13 +5,10 @@ namespace Akbarjimi\ExcelImporter\Services;
 use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Akbarjimi\ExcelImporter\Events\ExcelUploaded;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\DB;
 
 readonly class ImportManager
 {
-    public function __construct(private Dispatcher $events) {}
-
     public function import(string $relativePath, ?string $driver = null): ExcelFile
     {
         $driver ??= config('excel-importer.default_disk');
