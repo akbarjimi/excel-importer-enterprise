@@ -3,6 +3,7 @@
 namespace Akbarjimi\ExcelImporter\Repositories;
 
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
+use Illuminate\Database\Eloquent\Collection;
 
 class ExcelSheetRepository
 {
