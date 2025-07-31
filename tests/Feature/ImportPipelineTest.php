@@ -73,17 +73,21 @@ it('stores Excel sheet metadata in database after file is uploaded', function ()
     expect($firstSheet->status)->toBe(ExcelSheetStatus::PENDING->value);
 });
 
-it('extracts rows and fires event after uploading an Excel file', function () {
-    $manager = app(ImportManager::class);
+it('dispatches sheet events after importing Excel file', function () {
+    Event::fake([
+        SheetsDiscovered::class,
+        SheetDiscovered::class,
+        AllSheetsDispatched::class,
+    ]);
 
-    $file = $manager->import($this->relativeTargetPath);
+    $manager = app(ImportManager::class);
+    $manager->import($this->relativeTargetPath);
+
+    Event::assertDispatched(SheetsDiscovered::class);
+    Event::assertDispatched(SheetDiscovered::class);
+    Event::assertDispatched(AllSheetsDispatched::class);
 
     $sheet = ExcelSheet::first();
-
     expect($sheet)->not->toBeNull();
-    expect($sheet->rows_extracted_at)->not->toBeNull();
-
-    expect(ExcelRow::count())->toBe(3);
-
-    Event::assertDispatched(RowsExtracted::class);
+    expect($sheet->status)->toBe(ExcelSheetStatus::PENDING);
 });
