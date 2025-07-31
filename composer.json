@@ -5,10 +5,10 @@
   "license": "MIT",
   "require": {
     "php": "^8.4",
-    "illuminate/support": "^12.0"
+    "illuminate/support": "^12.0",
+    "maatwebsite/excel": "^3.1"
   },
   "suggest": {
-    "maatwebsite/excel": "Laravel Excel driver",
     "openspout/openspout": "Spout engine for large files"
   },
   "require-dev": {
