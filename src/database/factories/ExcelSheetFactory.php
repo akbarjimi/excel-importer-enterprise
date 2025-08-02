@@ -26,7 +26,10 @@ class ExcelSheetFactory extends Factory
 
             'chunk_count' => $this->faker->optional()->numberBetween(1, 20),
 
-            'meta' => $this->faker->optional()->json(),
+            'meta' => $this->faker->optional()->passthrough(json_encode([
+                'source' => 'importer',
+                'version' => $this->faker->randomFloat(1, 1.0, 2.0),
+            ])),
 
             'exception' => $this->faker->optional()->realText(100),
         ];
