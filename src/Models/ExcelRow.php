@@ -6,9 +6,12 @@ use Akbarjimi\ExcelImporter\Enums\ExcelRowStatus;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 final class ExcelRow extends Model implements Arrayable
 {
+    use HasFactory;
+
     protected $fillable = [
         'excel_sheet_id',
         'row_index',
