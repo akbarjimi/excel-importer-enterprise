@@ -2,6 +2,7 @@
 
 namespace Akbarjimi\ExcelImporter\Models;
 
+use Akbarjimi\ExcelImporter\Database\Factories\ExcelRowErrorFactory;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,5 +43,10 @@ final class ExcelRowError extends Model implements Arrayable
             'message' => $this->message,
             'created_at' => $this->created_at,
         ];
+    }
+
+    protected static function newFactory(): ExcelRowErrorFactory
+    {
+        return ExcelRowErrorFactory::new();
     }
 }

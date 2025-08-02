@@ -2,11 +2,12 @@
 
 namespace Akbarjimi\ExcelImporter\Models;
 
+use Akbarjimi\ExcelImporter\Database\Factories\ExcelSheetFactory;
 use Akbarjimi\ExcelImporter\Enums\ExcelSheetStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ExcelSheet extends Model
 {
@@ -34,5 +35,10 @@ class ExcelSheet extends Model
     public function rows(): HasMany
     {
         return $this->hasMany(ExcelRow::class);
+    }
+
+    protected static function newFactory(): ExcelSheetFactory
+    {
+        return ExcelSheetFactory::new();
     }
 }

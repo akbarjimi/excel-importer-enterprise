@@ -2,6 +2,7 @@
 
 namespace Akbarjimi\ExcelImporter\Models;
 
+use Akbarjimi\ExcelImporter\Database\Factories\ExcelFileFactory;
 use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -56,5 +57,10 @@ final class ExcelFile extends Model
             ExcelFileStatus::COMPLETED => 'All chunks processed successfully',
             ExcelFileStatus::FAILED => 'General failure at any stage',
         };
+    }
+
+    protected static function newFactory(): ExcelFileFactory
+    {
+        return ExcelFileFactory::new();
     }
 }
