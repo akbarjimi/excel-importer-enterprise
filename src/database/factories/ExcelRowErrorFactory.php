@@ -32,14 +32,14 @@ class ExcelRowErrorFactory extends Factory
 
     public function forRow(ExcelRow $row): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'excel_row_id' => $row->id,
         ]);
     }
 
     public function validationError(string $field = 'A1'): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'field' => $field,
             'error_type' => 'validation',
             'error_code' => 'required_field_missing',
@@ -49,7 +49,7 @@ class ExcelRowErrorFactory extends Factory
 
     public function systemError(): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'field' => null,
             'error_type' => 'system',
             'error_code' => 'system_exception',

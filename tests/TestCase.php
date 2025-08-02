@@ -13,6 +13,7 @@ abstract class TestCase extends Orchestra
 
         config(['queue.default' => 'sync']);
     }
+
     /**
      * Load your service provider.
      */

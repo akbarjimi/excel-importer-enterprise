@@ -4,9 +4,9 @@ namespace Akbarjimi\ExcelImporter\Models;
 
 use Akbarjimi\ExcelImporter\Database\Factories\ExcelRowErrorFactory;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 final class ExcelRowError extends Model implements Arrayable
 {

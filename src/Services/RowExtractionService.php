@@ -18,8 +18,11 @@ use Maatwebsite\Excel\Row;
 class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 {
     private ExcelSheet $sheet;
+
     private array $buffer = [];
+
     private int $inserted = 0;
+
     private int $batchSize;
 
     public function __construct()
@@ -46,7 +49,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
             }
 
         } catch (\Throwable $e) {
-            Log::critical('Excel import failed: ' . $e->getMessage(), ['sheet_id' => $sheet->id]);
+            Log::critical('Excel import failed: '.$e->getMessage(), ['sheet_id' => $sheet->id]);
             $this->setFileStatus(ExcelFileStatus::FAILED);
             throw_if(app()->isLocal(), $e);
         }
@@ -64,7 +67,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
             $this->buffer[] = [
                 'excel_sheet_id' => $this->sheet->id,
                 'content' => $encoded,
-                'hash_algo'    => $hash_algo,
+                'hash_algo' => $hash_algo,
                 'content_hash' => hash($hash_algo, $encoded),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -94,7 +97,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 
             $this->inserted += count($this->buffer);
         } catch (\Throwable $e) {
-            Log::critical('Bulk insert failed: ' . $e->getMessage(), ['sheet_id' => $this->sheet->id]);
+            Log::critical('Bulk insert failed: '.$e->getMessage(), ['sheet_id' => $this->sheet->id]);
         } finally {
             $this->buffer = [];
         }

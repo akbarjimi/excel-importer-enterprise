@@ -34,7 +34,7 @@ class ExcelSheetFactory extends Factory
 
     public function pending(): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'status' => ExcelSheetStatus::PENDING->value,
             'rows_extracted_at' => null,
         ]);
@@ -42,15 +42,15 @@ class ExcelSheetFactory extends Factory
 
     public function extracted(): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'status' => ExcelSheetStatus::EXTRACTED->value,
             'rows_extracted_at' => now(),
         ]);
     }
 
-    public function failed(string $exception = null): static
+    public function failed(?string $exception = null): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'status' => ExcelSheetStatus::FAILED->value,
             'exception' => $exception ?? 'Unhandled exception during extraction.',
         ]);
@@ -58,14 +58,14 @@ class ExcelSheetFactory extends Factory
 
     public function withRowsCount(int $count): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'rows_count' => $count,
         ]);
     }
 
     public function withChunks(int $chunks): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'chunk_count' => $chunks,
         ]);
     }

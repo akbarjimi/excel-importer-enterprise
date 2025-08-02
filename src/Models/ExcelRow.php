@@ -5,9 +5,9 @@ namespace Akbarjimi\ExcelImporter\Models;
 use Akbarjimi\ExcelImporter\Database\Factories\ExcelRowFactory;
 use Akbarjimi\ExcelImporter\Enums\ExcelRowStatus;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 final class ExcelRow extends Model implements Arrayable
 {
@@ -69,7 +69,6 @@ final class ExcelRow extends Model implements Arrayable
             'updated_at' => $this->updated_at,
         ];
     }
-
 
     protected static function newFactory(): ExcelRowFactory
     {
