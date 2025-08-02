@@ -34,6 +34,7 @@ class ExcelImporterServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/config/excel-importer.php', 'excel-importer'
         );
+        $this->loadFactoriesFrom(__DIR__.'/database/factories');
     }
 
     public function registerEventListeners(): void
