@@ -36,7 +36,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
         $this->setFileStatus(ExcelFileStatus::READING);
 
         try {
-            Excel::import($this, $sheet->file->resolvedPath(), $sheet->file->driver);
+            Excel::import($this, $sheet->excelFile->resolvedPath(), $sheet->excelFile->driver);
 
             $sheet->update(['rows_extracted_at' => now()]);
             $this->setFileStatus(ExcelFileStatus::ROWS_EXTRACTED);
@@ -105,7 +105,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 
     private function setFileStatus(ExcelFileStatus $status): void
     {
-        $this->sheet->file->update(['status' => $status->value]);
+        $this->sheet->excelFile->update(['status' => $status->value]);
     }
 
     public function chunkSize(): int
