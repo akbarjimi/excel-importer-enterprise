@@ -11,10 +11,8 @@ final readonly class HandleExcelUploaded
 {
     public function __construct(
         private SheetDiscoveryService $discovery,
-        private ExcelSheetRepository  $sheetRepo,
-    )
-    {
-    }
+        private ExcelSheetRepository $sheetRepo,
+    ) {}
 
     public function handle(ExcelUploaded $event): void
     {

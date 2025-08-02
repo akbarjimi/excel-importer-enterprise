@@ -17,8 +17,11 @@ use Maatwebsite\Excel\Row;
 class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 {
     private ExcelSheet $sheet;
+
     private array $buffer = [];
+
     private int $inserted = 0;
+
     private int $batchSize;
 
     public function __construct()
@@ -41,7 +44,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
             event(new RowsExtracted($sheet, $this->inserted));
         } catch (\Throwable $e) {
             throw_if(app()->isLocal(), $e);
-            Log::critical('Excel import failed: ' . $e->getMessage(), ['sheet_id' => $sheet->id]);
+            Log::critical('Excel import failed: '.$e->getMessage(), ['sheet_id' => $sheet->id]);
             $this->setFileStatus(ExcelFileStatus::FAILED);
         }
 
@@ -81,7 +84,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
             DB::table('excel_rows')->insert($this->buffer);
             $this->inserted += count($this->buffer);
         } catch (\Throwable $e) {
-            Log::critical('Bulk insert failed: ' . $e->getMessage(), ['sheet_id' => $this->sheet->id]);
+            Log::critical('Bulk insert failed: '.$e->getMessage(), ['sheet_id' => $this->sheet->id]);
         } finally {
             $this->buffer = [];
         }

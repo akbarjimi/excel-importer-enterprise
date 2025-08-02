@@ -11,9 +11,7 @@ final readonly class HandleSheetsDiscovered
 {
     public function __construct(
         private ExcelSheetRepository $sheetRepo,
-    )
-    {
-    }
+    ) {}
 
     public function handle(SheetsDiscovered $event): void
     {

@@ -2,8 +2,8 @@
 
 namespace Akbarjimi\ExcelImporter\Database\Factories;
 
-use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
+use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ExcelFileFactory extends Factory
@@ -13,8 +13,8 @@ class ExcelFileFactory extends Factory
     public function definition(): array
     {
         return [
-            'file_name' => $this->faker->word() . '.xlsx',
-            'path' => 'testing/' . $this->faker->uuid() . '.xlsx',
+            'file_name' => $this->faker->word().'.xlsx',
+            'path' => 'testing/'.$this->faker->uuid().'.xlsx',
             'driver' => 'local',
             'status' => ExcelFileStatus::PENDING->value,
             'extracted_at' => null,

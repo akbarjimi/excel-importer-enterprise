@@ -20,9 +20,9 @@ class ExcelImporterServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerEventListeners();
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
         $this->publishes([
-            __DIR__ . '/config/excel-importer.php' => config_path('excel-importer.php'),
+            __DIR__.'/config/excel-importer.php' => config_path('excel-importer.php'),
         ], 'config');
     }
 
@@ -32,7 +32,7 @@ class ExcelImporterServiceProvider extends ServiceProvider
         $this->app->bind(RowExtractionService::class);
 
         $this->mergeConfigFrom(
-            __DIR__ . '/config/excel-importer.php', 'excel-importer'
+            __DIR__.'/config/excel-importer.php', 'excel-importer'
         );
     }
 

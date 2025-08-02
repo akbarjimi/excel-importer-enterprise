@@ -6,7 +6,5 @@ readonly class AllSheetsDispatched
 {
     public function __construct(
         public int $fileId,
-    )
-    {
-    }
+    ) {}
 }

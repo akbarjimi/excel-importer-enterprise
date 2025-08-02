@@ -6,7 +6,5 @@ readonly class SheetsDiscovered
 {
     public function __construct(
         public int $fileId,
-    )
-    {
-    }
+    ) {}
 }

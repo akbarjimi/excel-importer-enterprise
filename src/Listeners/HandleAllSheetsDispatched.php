@@ -6,9 +6,7 @@ use Akbarjimi\ExcelImporter\Events\SheetDiscovered;
 
 final readonly class HandleAllSheetsDispatched
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function handle(SheetDiscovered $event): void
     {

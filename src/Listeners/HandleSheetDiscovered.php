@@ -9,9 +9,7 @@ final readonly class HandleSheetDiscovered
 {
     public function __construct(
         private RowExtractionService $extractor,
-    )
-    {
-    }
+    ) {}
 
     public function handle(SheetDiscovered $event): void
     {
