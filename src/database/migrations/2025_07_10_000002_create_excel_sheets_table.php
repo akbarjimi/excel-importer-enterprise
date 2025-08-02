@@ -25,6 +25,7 @@ return new class extends Migration
 
             $table->unsignedInteger('rows_count')->nullable();
             $table->timestamp('rows_extracted_at')->nullable();
+            $table->index(['excel_file_id', 'rows_extracted_at']);
 
             $table->unsignedInteger('chunk_count')->nullable();
             $table->json('meta')->nullable();
