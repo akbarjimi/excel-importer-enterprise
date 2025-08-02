@@ -6,13 +6,11 @@ use Akbarjimi\ExcelImporter\Events\AllSheetsDispatched;
 use Akbarjimi\ExcelImporter\Events\SheetDiscovered;
 use Akbarjimi\ExcelImporter\Events\SheetsDiscovered;
 use Akbarjimi\ExcelImporter\Repositories\ExcelSheetRepository;
-use Akbarjimi\ExcelImporter\Services\SheetDiscoveryService;
 
 final readonly class HandleSheetsDiscovered
 {
     public function __construct(
-        private ExcelSheetRepository  $sheetRepo,
-        private SheetDiscoveryService $discovery,
+        private ExcelSheetRepository $sheetRepo,
     )
     {
     }
