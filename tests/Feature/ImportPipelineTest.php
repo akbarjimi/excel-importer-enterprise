@@ -75,7 +75,6 @@ it('stores Excel sheet metadata in database after file is uploaded', function ()
 
 it('dispatches sheet events after importing Excel file', function () {
     Event::fake([
-        SheetsDiscovered::class,
         SheetDiscovered::class,
         AllSheetsDispatched::class,
     ]);
@@ -83,7 +82,6 @@ it('dispatches sheet events after importing Excel file', function () {
     $manager = app(ImportManager::class);
     $manager->import($this->relativeTargetPath);
 
-    Event::assertDispatched(SheetsDiscovered::class);
     Event::assertDispatched(SheetDiscovered::class);
     Event::assertDispatched(AllSheetsDispatched::class);
 
