@@ -2,6 +2,7 @@
 
 namespace Akbarjimi\ExcelImporter\Models;
 
+use Akbarjimi\ExcelImporter\Enums\ExcelSheetStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +20,7 @@ class ExcelSheet extends Model
     protected $casts = [
         'meta' => 'array',
         'rows_extracted_at' => 'datetime',
+        'status' => ExcelSheetStatus::class,
     ];
 
     public function file(): BelongsTo
