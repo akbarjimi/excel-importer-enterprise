@@ -5,9 +5,12 @@ namespace Akbarjimi\ExcelImporter\Models;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 final class ExcelRowError extends Model implements Arrayable
 {
+    use HasFactory;
+
     protected $fillable = [
         'excel_row_id',
         'field',
