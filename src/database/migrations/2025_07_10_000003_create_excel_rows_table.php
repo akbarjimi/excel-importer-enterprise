@@ -21,6 +21,7 @@ return new class extends Migration
 
             $table->json('content');
 
+            $table->string('hash_algo')->default('md5');
             $table->string('content_hash')->nullable();
 
             $table->enum('status', array_column(ExcelRowStatus::cases(), 'value'))
@@ -31,7 +32,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['excel_sheet_id', 'content_hash'], 'sheet_content_hash_unique');
+            $table->unique(['excel_sheet_id', 'content_hash', 'hash_algo'], 'sheet_content_hash_unique');
         });
     }
 
