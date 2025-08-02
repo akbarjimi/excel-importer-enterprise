@@ -33,7 +33,7 @@ final class ExcelRow extends Model implements Arrayable
     // Relationships
     // ------------------------------------------------------------------
 
-    public function sheet(): BelongsTo
+    public function excelSheet(): BelongsTo
     {
         return $this->belongsTo(ExcelSheet::class);
     }

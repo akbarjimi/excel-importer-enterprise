@@ -2,7 +2,7 @@
 
 namespace Akbarjimi\ExcelImporter\Models;
 
-use Akbarjimi\ExcelImporter\Database\Factories\ExcelFileFactory;
+use Akbarjimi\ExcelImporter\Database\factories\ExcelFileFactory;
 use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +28,7 @@ final class ExcelFile extends Model
     // Relationships
     // ---------------------------------------------------------------------
 
-    public function sheets(): HasMany
+    public function excelSheets(): HasMany
     {
         return $this->hasMany(ExcelSheet::class);
     }

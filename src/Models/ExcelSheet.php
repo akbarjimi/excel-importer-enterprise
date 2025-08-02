@@ -27,12 +27,12 @@ class ExcelSheet extends Model
         'status' => ExcelSheetStatus::class,
     ];
 
-    public function file(): BelongsTo
+    public function excelFile(): BelongsTo
     {
         return $this->belongsTo(ExcelFile::class, 'excel_file_id');
     }
 
-    public function rows(): HasMany
+    public function excelRow(): HasMany
     {
         return $this->hasMany(ExcelRow::class);
     }

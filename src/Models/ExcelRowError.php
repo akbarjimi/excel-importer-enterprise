@@ -27,7 +27,7 @@ final class ExcelRowError extends Model implements Arrayable
         'message' => 'string',
     ];
 
-    public function row(): BelongsTo
+    public function excelRow(): BelongsTo
     {
         return $this->belongsTo(ExcelRow::class, 'excel_row_id');
     }

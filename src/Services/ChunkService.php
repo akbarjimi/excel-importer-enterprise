@@ -14,7 +14,7 @@ class ChunkService
     {
         $chunkSize = config('excel-importer.chunk_size', 1000);
 
-        $totalRows = $sheet->rows()->count();
+        $totalRows = $sheet->excelRow()->count();
         if ($totalRows === 0) {
             Log::info("Sheet [{$sheet->id}] has no rows to process.");
 

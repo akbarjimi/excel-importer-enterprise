@@ -20,8 +20,8 @@ readonly class FileExtractionCompleted
     {
         return new self(
             fileId: $file->id,
-            totalSheets: $file->sheets()->count(),
-            totalRows: $file->sheets()->withCount('rows')->get()->sum('rows_count')
+            totalSheets: $file->excelSheets()->count(),
+            totalRows: $file->excelSheets()->withCount('rows')->get()->sum('rows_count')
         );
     }
 }
