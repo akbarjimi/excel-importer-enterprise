@@ -70,7 +70,7 @@ it('stores Excel sheet metadata in database after file is uploaded', function ()
 
     expect($firstSheet->name)->toBeString()->not->toBeEmpty();
     expect($firstSheet->rows_count)->toBeGreaterThan(0);
-    expect($firstSheet->status)->toBe(ExcelSheetStatus::PENDING->value);
+    expect($firstSheet->status)->toBe(ExcelSheetStatus::PENDING);
 });
 
 it('dispatches sheet events after importing Excel file', function () {
