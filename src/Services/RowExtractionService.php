@@ -19,8 +19,11 @@ use Throwable;
 class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 {
     protected ExcelSheet $sheet;
+
     protected array $buffer = [];
+
     protected int $inserted = 0;
+
     protected int $batchSize;
 
     public function __construct()
@@ -42,7 +45,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
             $this->setFileStatus(ExcelFileStatus::ROWS_EXTRACTED);
 
             $sheet->excelFile->update([
-                'rows_extracted' => $this->inserted
+                'rows_extracted' => $this->inserted,
             ]);
 
             event(new RowsExtracted($sheet, $this->inserted));
@@ -51,9 +54,9 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
                 event(new AllSheetsDispatched($sheet->excelFile->getKey()));
             }
         } catch (Throwable $e) {
-            Log::critical('Excel import failed: ' . $e->getMessage(), [
+            Log::critical('Excel import failed: '.$e->getMessage(), [
                 'sheet_id' => $sheet->id,
-                'file_id' => $sheet->excel_file_id
+                'file_id' => $sheet->excel_file_id,
             ]);
 
             $this->setFileStatus(ExcelFileStatus::FAILED);
@@ -67,8 +70,8 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
     {
         try {
             $raw = $row->toArray(null, true, true, false);
-            if (!is_array($raw)) {
-                throw new \RuntimeException("Invalid row: not an array.");
+            if (! is_array($raw)) {
+                throw new \RuntimeException('Invalid row: not an array.');
             }
             $encoded = json_encode($raw, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
             $hashAlgo = config('excel-importer.hash_algo');
@@ -87,7 +90,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
             }
         } catch (Throwable $e) {
             Log::error("Row extraction failed at row {$row->getIndex()}: {$e->getMessage()}", [
-                'sheet_id' => $this->sheet->id
+                'sheet_id' => $this->sheet->id,
             ]);
 
             event(new RowFailed($this->sheet, $row->getIndex(), $e->getMessage()));
@@ -109,8 +112,8 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 
             $this->inserted += count($this->buffer);
         } catch (Throwable $e) {
-            Log::critical('Bulk insert failed: ' . $e->getMessage(), [
-                'sheet_id' => $this->sheet->id
+            Log::critical('Bulk insert failed: '.$e->getMessage(), [
+                'sheet_id' => $this->sheet->id,
             ]);
         } finally {
             $this->buffer = [];
