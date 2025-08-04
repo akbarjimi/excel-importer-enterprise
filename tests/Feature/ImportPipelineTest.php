@@ -92,15 +92,8 @@ it('dispatches sheet events after importing Excel file', function () {
 it('extracts rows and fires AllSheetsDispatched when last sheet is processed', function () {
     Event::fake([AllSheetsDispatched::class]);
 
-    $file = ExcelFile::factory()->create();
-    $sheet = ExcelSheet::factory()->for($file)->create();
-
     $manager = app(ImportManager::class);
-    $manager->import($this->relativeTargetPath);
-
-    $sheet->refresh();
-    $file->refresh();
-    $file->load('excelSheets');
+    $file = $manager->import($this->relativeTargetPath);
 
     $this->assertDatabaseCount('excel_rows', 3);
 
