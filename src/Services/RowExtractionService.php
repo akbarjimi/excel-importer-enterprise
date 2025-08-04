@@ -40,12 +40,12 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
 
             $sheet->update(['rows_extracted_at' => now()]);
             $this->setFileStatus(ExcelFileStatus::ROWS_EXTRACTED);
-            $sheet->file->update(['rows_extracted' => $this->inserted]);
+            $sheet->excelFile->update(['rows_extracted' => $this->inserted]);
 
             event(new RowsExtracted($sheet, $this->inserted));
 
-            if ($sheet->file->sheets()->whereNull('rows_extracted_at')->count() === 0) {
-                event(new AllSheetsDispatched($sheet->file->getKey()));
+            if ($sheet->excelFile->excelSheets()->whereNull('rows_extracted_at')->count() === 0) {
+                event(new AllSheetsDispatched($sheet->excelFile->getKey()));
             }
 
         } catch (\Throwable $e) {
