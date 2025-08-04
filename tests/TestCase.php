@@ -21,6 +21,7 @@ abstract class TestCase extends Orchestra
     {
         return [
             ExcelImporterServiceProvider::class,
+            \Maatwebsite\Excel\ExcelServiceProvider::class,
         ];
     }
 
