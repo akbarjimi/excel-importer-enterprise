@@ -94,7 +94,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
         try {
             DB::table('excel_rows')->upsert(
                 $this->buffer,
-                ['excel_sheet_id', 'content_hash'],
+                ['excel_sheet_id', 'content_hash', 'hash_algo'],
                 ['updated_at']
             );
 
