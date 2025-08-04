@@ -36,7 +36,7 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
         $this->setFileStatus(ExcelFileStatus::READING);
 
         try {
-            Excel::import($this, $sheet->excelFile->resolvedPath(), $sheet->excelFile->driver);
+            Excel::import($this, $sheet->excelFile->path, $sheet->excelFile->driver);
 
             $sheet->update(['rows_extracted_at' => now()]);
             $this->setFileStatus(ExcelFileStatus::ROWS_EXTRACTED);
@@ -60,7 +60,10 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
     public function onRow(Row $row): void
     {
         try {
-            $raw = $row->toArray(null, true, true, true);
+            $raw = $row->toArray(null, true, true, false);
+            if (!is_array($raw)) {
+                throw new \RuntimeException("Invalid row: not array");
+            }
             $encoded = json_encode($raw, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
 
             $hash_algo = config('excel-importer.hash_algo');
