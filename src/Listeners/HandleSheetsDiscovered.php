@@ -21,7 +21,5 @@ final readonly class HandleSheetsDiscovered
         foreach ($sheets as $i => $sheet) {
             event(new SheetDiscovered($sheet, $i === $lastIndex));
         }
-
-        event(new AllSheetsDispatched($event->fileId));
     }
 }
