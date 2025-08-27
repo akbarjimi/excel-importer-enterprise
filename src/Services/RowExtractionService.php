@@ -48,8 +48,6 @@ class RowExtractionService implements OnEachRow, WithChunkReading, WithStartRow
                 'rows_extracted' => $this->inserted,
             ]);
 
-            event(new RowsExtracted($sheet, $this->inserted));
-
             if ($sheet->excelFile->excelSheets()->whereNull('rows_extracted_at')->doesntExist()) {
                 event(new AllSheetsDispatched($sheet->excelFile->getKey()));
             }
