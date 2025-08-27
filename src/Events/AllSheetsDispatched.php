@@ -2,7 +2,7 @@
 
 namespace Akbarjimi\ExcelImporter\Events;
 
-readonly class AllSheetsDispatched
+final readonly class AllSheetsDispatched
 {
     public function __construct(
         public int $fileId,
