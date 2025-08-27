@@ -2,14 +2,62 @@
 
 namespace Akbarjimi\ExcelImporter\Listeners;
 
+use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Akbarjimi\ExcelImporter\Events\AllSheetsDispatched;
+use Akbarjimi\ExcelImporter\Jobs\ProcessChunkJob;
+use Akbarjimi\ExcelImporter\Models\ExcelFile;
+use Akbarjimi\ExcelImporter\Services\ChunkerService;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Log;
 
-final readonly class HandleAllSheetsDispatched
+final class HandleAllSheetsDispatched implements ShouldQueue
 {
-    public function __construct() {}
+    use InteractsWithQueue;
+
+    public int $tries = 3;
+    public int $timeout = 60;
+
+    public function __construct(private readonly ChunkerService $chunker) {}
 
     public function handle(AllSheetsDispatched $event): void
     {
-        // do nothing for now
+        $file = ExcelFile::query()->with('excelSheets')->findOrFail($event->fileId);
+
+        // Create all chunks transactionally
+        $chunks = $this->chunker->createChunksForFile($file);
+
+        if ($chunks->isEmpty()) {
+            Log::warning('No chunks created for file', ['file_id' => $file->getKey()]);
+            return;
+        }
+
+        // Dispatch AFTER COMMIT to avoid enqueuing for rolled-back rows
+        $batch = Bus::batch(
+            $chunks->map(fn ($c) => (new ProcessChunkJob($c->getKey()))->afterCommit())
+        )->name("excel-file:{$file->getKey()}:row-chunks")
+            ->onQueue(config('excel-importer.queue', 'default'))
+            ->dispatch();
+
+        Log::info('Chunk jobs batched', [
+            'file_id' => $file->getKey(),
+            'batch_id'=> $batch->id,
+            'jobs'    => $chunks->count(),
+        ]);
+
+        $file->update(['status' => ExcelFileStatus::PROCESSING->value]);
+    }
+
+    public function failed(AllSheetsDispatched $event, \Throwable $e): void
+    {
+        Log::error('HandleAllSheetsDispatched failed', [
+            'file_id' => $event->fileId,
+            'error'   => $e->getMessage(),
+        ]);
+
+        ExcelFile::whereKey($event->fileId)->update([
+            'status' => ExcelFileStatus::FAILED->value,
+        ]);
     }
 }
