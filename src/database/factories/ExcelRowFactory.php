@@ -23,7 +23,7 @@ class ExcelRowFactory extends Factory
 
         return [
             'excel_sheet_id' => ExcelSheet::factory(),
-            'row_index' => $this->faker->unique()->numberBetween(1, 1000),
+            'row_index' => $this->faker->unique()->numberBetween(1, 1000000),
             'content' => $content,
             'content_hash' => md5($encoded),
             'status' => ExcelRowStatus::PENDING,
