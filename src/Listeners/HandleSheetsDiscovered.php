@@ -15,10 +15,9 @@ final readonly class HandleSheetsDiscovered
     public function handle(SheetsDiscovered $event): void
     {
         $sheets = $this->sheetRepo->getByFileId($event->fileId);
-        $lastIndex = $sheets->count() - 1;
 
-        foreach ($sheets as $i => $sheet) {
-            event(new SheetDiscovered($sheet, $i === $lastIndex));
+        foreach ($sheets as $sheet) {
+            event(new SheetDiscovered($sheet));
         }
     }
 }
