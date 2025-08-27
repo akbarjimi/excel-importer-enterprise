@@ -17,7 +17,7 @@ composer require akbarjimi/laravel-excel-importer
 
 ## Documentation
 - [docs/PRD.md](docs/PRD.md)
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [docs/ARCHITECTURE.md](docs/internal/ARCHITECTURE.md)
 - [docs/USAGE.md](docs/USAGE.md)
 
 ## License
