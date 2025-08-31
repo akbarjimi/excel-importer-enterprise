@@ -2,20 +2,34 @@
 
 namespace Akbarjimi\ExcelImporter\Services;
 
-use Akbarjimi\ExcelImporter\Models\ExcelRow;
+use Akbarjimi\ExcelImporter\Models\ExcelSheet;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 final class ValidateService
 {
-    public function apply(array $data, ExcelRow $row): void
-    {
-        $rules = config('excel-importer.validation.'. $row->excel_sheet_id, []);
-        if (!$rules) return;
+    private array $rules = [];
 
-        $v = Validator::make($data, $rules);
-        if ($v->fails()) {
-            throw new ValidationException($v);
+    /**
+     * Load validation rules for a specific sheet
+     */
+    public function load(ExcelSheet $sheet): void
+    {
+        $this->rules = Config::get('excel-importer-transformers.' . $sheet->name . '.validation', []);
+    }
+
+    /**
+     * Validate a row and return validation errors, if any
+     */
+    public function apply(array $payload): array
+    {
+        if (empty($this->rules)) {
+            return [];
         }
+
+        $validator = Validator::make($payload, $this->rules);
+
+        return $validator->fails() ? $validator->errors()->toArray() : [];
     }
 }
