@@ -23,7 +23,7 @@ it('applies transformer correctly', function () {
 
 it('applies validator correctly for valid rows', function () {
     $sheet = ExcelSheet::factory()->make(['name' => 'Sheet1']);
-    $validRow = ['A1' => 'HELLO', 'B1' => 'john.doe@mail.com', 'C1' => 30,];
+    $validRow = ['A1' => 'HELLO', 'B1' => 'john.doe@mail.com', 'C1' => 31,];
 
     $validate = app(ValidateService::class);
     $validate->load($sheet);
