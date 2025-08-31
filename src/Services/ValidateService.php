@@ -16,7 +16,8 @@ final class ValidateService
      */
     public function load(ExcelSheet $sheet): void
     {
-        $this->rules = Config::get('excel-importer-sheets.' . $sheet->name . '.validation', []);
+        $rules = Config::get('excel-importer-sheets.' . $sheet->name . '.validation', []);
+        $this->rules = $rules;
     }
 
     /**
@@ -24,6 +25,8 @@ final class ValidateService
      */
     public function apply(array $payload): array
     {
+        // TODO: what happen if rules do not load and this line said
+        // row contents are ok?
         if (empty($this->rules)) {
             return [];
         }
