@@ -21,18 +21,27 @@ it('applies transformer correctly', function () {
     expect($transformed['B1'])->toBe('123');
 });
 
-it('applies validator correctly', function () {
+it('applies validator correctly for valid rows', function () {
     $sheet = ExcelSheet::factory()->make(['name' => 'Sheet1']);
     $validRow = ['A1' => 'HELLO', 'B1' => '123'];
-    $invalidRow = ['A1' => '', 'B1' => 'abc'];
 
     $validate = app(ValidateService::class);
     $validate->load($sheet);
 
     $errorsValid = $validate->apply($validRow);
-    $errorsInvalid = $validate->apply($invalidRow);
 
     expect($errorsValid)->toBeEmpty();
+});
+
+it('applies validator correctly for invalid rows', function () {
+    $sheet = ExcelSheet::factory()->make(['name' => 'Sheet1']);
+    $invalidRow = ['A1' => '', 'B1' => 'abc'];
+
+    $validate = app(ValidateService::class);
+    $validate->load($sheet);
+
+    $errorsInvalid = $validate->apply($invalidRow);
+
     expect($errorsInvalid)->not()->toBeEmpty();
     expect($errorsInvalid)->toHaveKeys(['A1', 'B1']);
 });
