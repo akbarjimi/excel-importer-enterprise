@@ -11,7 +11,7 @@ return [
         'validation' => [
             'A1' => 'required|string|max:255',
             'B1' => 'required|email',
-            'C1' => 'required|int',
+            'C1' => 'required|min:31',
         ],
     ],
     // 2sheets2rows.xlsx
