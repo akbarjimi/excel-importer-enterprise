@@ -4,10 +4,6 @@ use Akbarjimi\ExcelImporter\Models\ExcelSheet;
 use Akbarjimi\ExcelImporter\Services\TransformService;
 use Akbarjimi\ExcelImporter\Services\ValidateService;
 
-beforeEach(function () {
-    Config::set('excel-importer-sheets', require_once __DIR__ . "/../../_fixtures/config/excel-importer-sheets.php");
-});
-
 it('applies transformer correctly', function () {
     $sheet = ExcelSheet::factory()->make(['name' => 'Sheet1']);
     $rowContent = ['A1' => 'hello', 'B1' => '123'];
