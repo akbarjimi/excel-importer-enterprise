@@ -16,7 +16,7 @@ final class ValidateService
      */
     public function load(ExcelSheet $sheet): void
     {
-        $this->rules = Config::get('excel-importer-transformers.' . $sheet->name . '.validation', []);
+        $this->rules = Config::get('excel-importer-sheets.' . $sheet->name . '.validation', []);
     }
 
     /**

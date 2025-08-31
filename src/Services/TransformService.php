@@ -14,7 +14,7 @@ final class TransformService
      */
     public function load(ExcelSheet $sheet): void
     {
-        $config = Config::get('excel-importer-transformers.' . $sheet->name . '.transformers', []);
+        $config = Config::get('excel-importer-sheets.' . $sheet->name . '.transformers', []);
         $this->transformers = $config;
     }
 
