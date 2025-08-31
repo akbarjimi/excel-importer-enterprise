@@ -64,9 +64,10 @@ final class ProcessChunkJob implements ShouldQueue
 
         DB::beginTransaction();
         try {
+            /** @var ExcelRow $row */
             foreach ($rowsCursor as $row) {
-                $payload = $transform->apply($row);
-                $validate->apply($payload, $row);
+                $payload = $transform->apply($row->toArray());
+                $validate->apply($payload);
 
                 $outgoingRows[] = [
                     'excel_sheet_id' => $row->excel_sheet_id,
