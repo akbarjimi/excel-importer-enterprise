@@ -10,7 +10,6 @@ use Akbarjimi\ExcelImporter\Listeners\HandleAllSheetsDispatched;
 use Akbarjimi\ExcelImporter\Listeners\HandleExcelUploaded;
 use Akbarjimi\ExcelImporter\Listeners\HandleSheetDiscovered;
 use Akbarjimi\ExcelImporter\Listeners\HandleSheetsDiscovered;
-use Akbarjimi\ExcelImporter\Services\ChunkService;
 use Akbarjimi\ExcelImporter\Services\RowExtractionService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
