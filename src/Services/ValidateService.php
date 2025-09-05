@@ -5,7 +5,6 @@ namespace Akbarjimi\ExcelImporter\Services;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 final class ValidateService
 {
@@ -16,7 +15,7 @@ final class ValidateService
      */
     public function load(ExcelSheet $sheet): void
     {
-        $rules = Config::get('excel-importer-sheets.' . $sheet->name . '.validation', []);
+        $rules = Config::get('excel-importer-sheets.'.$sheet->name.'.validation', []);
         $this->rules = $rules;
     }
 

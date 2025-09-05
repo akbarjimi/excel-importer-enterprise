@@ -12,7 +12,7 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         config(['queue.default' => 'sync']);
-        config(['excel-importer-sheets' => require __DIR__ . "/_fixtures/config/excel-importer-sheets.php"]);
+        config(['excel-importer-sheets' => require __DIR__.'/_fixtures/config/excel-importer-sheets.php']);
     }
 
     /**

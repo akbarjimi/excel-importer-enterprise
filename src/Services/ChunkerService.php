@@ -35,10 +35,10 @@ final class ChunkerService
                 $chunks = $ids->chunk($this->chunkSize)->map(function ($idChunk) use ($sheet) {
                     return ExcelRowChunk::create([
                         'excel_sheet_id' => $sheet->getKey(),
-                        'from_row_id'    => $idChunk->first(),
-                        'to_row_id'      => $idChunk->last(),
-                        'size'           => $idChunk->count(),
-                        'status'         => 'pending',
+                        'from_row_id' => $idChunk->first(),
+                        'to_row_id' => $idChunk->last(),
+                        'size' => $idChunk->count(),
+                        'status' => 'pending',
                     ]);
                 });
 
@@ -46,9 +46,9 @@ final class ChunkerService
             }
 
             Log::info('Chunks created', [
-                'file_id'   => $file->getKey(),
+                'file_id' => $file->getKey(),
                 'chunk_cnt' => $all->count(),
-                'chunk_sz'  => $this->chunkSize,
+                'chunk_sz' => $this->chunkSize,
             ]);
 
             return $all;

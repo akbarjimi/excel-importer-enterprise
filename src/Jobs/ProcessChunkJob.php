@@ -21,11 +21,10 @@ final class ProcessChunkJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 5;
+
     public int $timeout = 120;
 
-    public function __construct(public readonly int $chunkId)
-    {
-    }
+    public function __construct(public readonly int $chunkId) {}
 
     public function middleware(): array
     {
@@ -33,16 +32,15 @@ final class ProcessChunkJob implements ShouldQueue
     }
 
     /**
-     * @param TransformService $transform transforms a single ExcelRow -> array
-     * @param ValidateService $validate validates transformed data (throws on invalid)
-     * @param ExcelRowRepository $repo low-level persistence (bulk/row ops)
+     * @param  TransformService  $transform  transforms a single ExcelRow -> array
+     * @param  ValidateService  $validate  validates transformed data (throws on invalid)
+     * @param  ExcelRowRepository  $repo  low-level persistence (bulk/row ops)
      */
     public function handle(
-        TransformService   $transform,
-        ValidateService    $validate,
+        TransformService $transform,
+        ValidateService $validate,
         ExcelRowRepository $repo
-    ): void
-    {
+    ): void {
         /** @var ExcelRowChunk $chunk */
         $chunk = ExcelRowChunk::findOrFail($this->chunkId);
 
@@ -85,7 +83,7 @@ final class ProcessChunkJob implements ShouldQueue
                 }
             }
 
-            if (!empty($outgoingRows)) {
+            if (! empty($outgoingRows)) {
                 $repo->bulkUpsert($outgoingRows);
             }
 

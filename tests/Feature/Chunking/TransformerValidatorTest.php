@@ -19,7 +19,7 @@ it('applies transformer correctly', function () {
 
 it('applies validator correctly for valid rows', function () {
     $sheet = ExcelSheet::factory()->make(['name' => 'Sheet1']);
-    $validRow = ['A1' => 'HELLO', 'B1' => 'john.doe@mail.com', 'C1' => 31,];
+    $validRow = ['A1' => 'HELLO', 'B1' => 'john.doe@mail.com', 'C1' => 31];
 
     $validate = app(ValidateService::class);
     $validate->load($sheet);
@@ -31,7 +31,7 @@ it('applies validator correctly for valid rows', function () {
 
 it('applies validator correctly for invalid rows', function () {
     $sheet = ExcelSheet::factory()->make(['name' => 'Sheet1']);
-    $invalidRow = ['A1' => '', 'B1' => 'john.doe@mail.com', 'C1' => '30',];
+    $invalidRow = ['A1' => '', 'B1' => 'john.doe@mail.com', 'C1' => '30'];
 
     $validate = app(ValidateService::class);
     $validate->load($sheet);

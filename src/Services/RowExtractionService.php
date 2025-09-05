@@ -5,7 +5,6 @@ namespace Akbarjimi\ExcelImporter\Services;
 use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Akbarjimi\ExcelImporter\Events\AllSheetsDispatched;
 use Akbarjimi\ExcelImporter\Events\RowFailed;
-use Akbarjimi\ExcelImporter\Events\RowsExtracted;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

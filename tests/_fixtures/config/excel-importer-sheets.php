@@ -4,9 +4,9 @@ return [
     // 1sheet3rows1header.xlsx
     'Sheet1' => [
         'transformers' => [
-            'A1' => fn($value) => strtoupper($value),
-            'B1' => fn($value) => strtoupper($value),
-            'C1' => fn($value) => strtoupper($value),
+            'A1' => fn ($value) => strtoupper($value),
+            'B1' => fn ($value) => strtoupper($value),
+            'C1' => fn ($value) => strtoupper($value),
         ],
         'validation' => [
             'A1' => 'required|string|max:255',
@@ -17,8 +17,8 @@ return [
     // 2sheets2rows.xlsx
     'Sheet2' => [
         'transformers' => [
-            'A1' => fn($value) => intval($value),
-            'B1' => fn($value) => intval($value),
+            'A1' => fn ($value) => intval($value),
+            'B1' => fn ($value) => intval($value),
         ],
         'validation' => [
             'A1' => 'required|int',
@@ -27,8 +27,8 @@ return [
     ],
     'Sheet3' => [
         'transformers' => [
-            'A1' => fn($value) => intval($value),
-            'B1' => fn($value) => intval($value),
+            'A1' => fn ($value) => intval($value),
+            'B1' => fn ($value) => intval($value),
         ],
         'validation' => [
             'A1' => 'required|int',
@@ -38,7 +38,7 @@ return [
     // 2sheets2000rows.xlsx
     'Sheet4' => [
         'transformers' => [
-            'A1' => fn($value) => intval($value),
+            'A1' => fn ($value) => intval($value),
         ],
         'validation' => [
             'A1' => 'required|int|max:2000',
@@ -46,7 +46,7 @@ return [
     ],
     'Sheet5' => [
         'transformers' => [
-            'A1' => fn($value) => intval($value),
+            'A1' => fn ($value) => intval($value),
         ],
         'validation' => [
             'A1' => 'required|int|max:2000',

@@ -5,8 +5,6 @@ namespace Akbarjimi\ExcelImporter\Models;
 use Akbarjimi\ExcelImporter\Database\Factories\ExcelFileFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
 
 final class ExcelRowChunk extends Model
 {
@@ -14,7 +12,7 @@ final class ExcelRowChunk extends Model
 
     protected $fillable = [
         'excel_sheet_id', 'from_row_id', 'to_row_id', 'size',
-        'status', 'attempts', 'error', 'dispatched_at', 'processed_at'
+        'status', 'attempts', 'error', 'dispatched_at', 'processed_at',
     ];
 
     protected $casts = [

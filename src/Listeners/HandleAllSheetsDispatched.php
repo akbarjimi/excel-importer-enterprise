@@ -17,6 +17,7 @@ final class HandleAllSheetsDispatched implements ShouldQueue
     use InteractsWithQueue;
 
     public int $tries = 3;
+
     public int $timeout = 60;
 
     public function __construct(private readonly ChunkerService $chunker) {}
@@ -30,6 +31,7 @@ final class HandleAllSheetsDispatched implements ShouldQueue
 
         if ($chunks->isEmpty()) {
             Log::warning('No chunks created for file', ['file_id' => $file->getKey()]);
+
             return;
         }
 
@@ -42,8 +44,8 @@ final class HandleAllSheetsDispatched implements ShouldQueue
 
         Log::info('Chunk jobs batched', [
             'file_id' => $file->getKey(),
-            'batch_id'=> $batch->id,
-            'jobs'    => $chunks->count(),
+            'batch_id' => $batch->id,
+            'jobs' => $chunks->count(),
         ]);
 
         $file->update(['status' => ExcelFileStatus::PROCESSING->value]);
@@ -53,7 +55,7 @@ final class HandleAllSheetsDispatched implements ShouldQueue
     {
         Log::error('HandleAllSheetsDispatched failed', [
             'file_id' => $event->fileId,
-            'error'   => $e->getMessage(),
+            'error' => $e->getMessage(),
         ]);
 
         ExcelFile::whereKey($event->fileId)->update([
