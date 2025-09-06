@@ -1,37 +1,68 @@
-# Product Requirements Document (PRD)
+# Product Requirements Document (PRD) - Excel Importer Package
 
-## Product Name
-Laravel Excel Importer
+## Product Overview
+The Excel Importer Package is an event-driven Laravel package designed to efficiently process large Excel files. It supports multi-sheet files, per-sheet row chunking, transformation, validation, and error tracking. The package is fully distributable, memory-efficient, and provides clear logs and status tracking.
 
-## Problem
-Each Laravel developer reinvents the wheel for Excel import: unreliable memory usage, poor error reporting, no retry, and unscalable. This package solves it with a distributed, testable, configurable Excel import pipeline.
+## Goals
+- Enable developers to import Excel files of arbitrary size without overwhelming memory.
+- Allow per-sheet and per-column transformation and validation using a flexible callback system.
+- Track and store errors in rows for user correction and reprocessing.
+- Provide an event-driven architecture with job orchestration and retry capabilities.
+- Support multiple languages for error messages and logs.
 
 ## Target Users
-Laravel developers and enterprise teams needing to import large Excel files with control and error traceability.
+- Backend developers using Laravel.
+- Teams needing a reliable, scalable, and distributable Excel import solution.
+- Developers requiring integration with job queues and event-driven architectures.
 
-## Use Cases
-- Import users in bulk
-- Ingest financial records
-- Migrate CRM data
+## Features
 
-## Goals for MVP
-- Chunked row import
-- Job-based queueing
-- Logging failed rows
-- Developer-provided file and path
+### Core Features
+1. **Excel File Handling**
+   - Import Excel files with multiple sheets.
+   - Store file metadata (`file_name`, `path`, `driver`, `status`, timestamps, owner).
 
-## Out of Scope for MVP
-- UI components
-- CSV or JSON support
-- Multilingual
+2. **Sheet Handling**
+   - Discover and store sheets.
+   - Track sheet status, row count, chunk count, extraction timestamps.
 
-## Technical Stack
-- PHP 8.0
-- Laravel 10 LTS
-- maatwebsite/excel
-- Queue system (database or Redis)
-- pestphp + orchestra/testbench
+3. **Row Processing**
+   - Store rows as JSON content.
+   - Track row status, row index, chunk index, content hash.
+   - Apply transformers and validators per sheet and per column.
+
+4. **Transformers & Validators**
+   - Register sheet-specific transformers and validators.
+   - Support callback-based transformations.
+   - Validate rows using Laravel's built-in validation system.
+   - Error rows stored in `ExcelRowError` for later correction.
+
+5. **Chunking & Job Orchestration**
+   - Break sheets into row chunks for efficient processing.
+   - Dispatch jobs for each chunk with idempotency and retries.
+   - Track chunk status and processing attempts.
+   - Logging for success, failure, and dispatched jobs.
+
+6. **Error Handling**
+   - Capture transformation and validation errors.
+   - Store errors with field, type, code, message, and timestamps.
+   - Support multi-language error messages.
+
+### Non-Functional Requirements
+- Memory-efficient processing with cursor-based row retrieval.
+- Fully event-driven architecture.
+- Distributable and maintainable package following SOLID principles.
+- Configurable per-sheet and per-column transformers and validators.
+- Logging for debugging and auditing.
+
+## Constraints
+- Compatible with Laravel 10+ and Queue Workers.
+- Use ENUMs for all status tracking.
+- Should not require Redis or external caching for MVP.
+- Support multiple Excel engines (e.g., Maatwebsite, Spout).
 
 ## Success Metrics
-- MVP: import small Excel file reliably
-- Final: import 1M rows in <X min, with retries and full error trace
+- Ability to process large Excel files (>100k rows) without memory exhaustion.
+- Accurate transformation and validation per sheet and per column.
+- All tests passing on feature and integration levels.
+- User-friendly error correction workflow.
