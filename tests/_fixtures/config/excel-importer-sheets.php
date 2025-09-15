@@ -13,6 +13,7 @@ return [
             'B1' => 'required|string|email',
             'C1' => 'required|int|min:31',
         ],
+        'mapper' => fn (array $row) => $row,
     ],
     // 2sheets2rows.xlsx
     'Sheet2' => [
@@ -24,6 +25,7 @@ return [
             'A1' => 'required|int',
             'B1' => 'required|int',
         ],
+        'mapper' => fn (array $row) => $row,
     ],
     'Sheet3' => [
         'transformers' => [
@@ -34,6 +36,7 @@ return [
             'A1' => 'required|int',
             'B1' => 'required|int',
         ],
+        'mapper' => fn (array $row) => $row,
     ],
     // 2sheets2000rows.xlsx
     'Sheet4' => [
@@ -43,6 +46,7 @@ return [
         'validation' => [
             'A1' => 'required|int|max:2000',
         ],
+        'mapper' => fn (array $row) => $row,
     ],
     'Sheet5' => [
         'transformers' => [
@@ -51,5 +55,6 @@ return [
         'validation' => [
             'A1' => 'required|int|max:2000',
         ],
+        'mapper' => fn (array $row) => $row,
     ],
 ];
