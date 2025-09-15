@@ -1,59 +1,16 @@
-# Roadmap
+## Roadmap
 
-This document outlines the development plan and milestones for the Excel Importer package.
+| Version | Goal (short) | Weight (impact) | Key deliverables |
+| --- | --- | --- | --- |
+| v0.9.0 | **Entity Mapper** (mapping staging → domain) | 4   | *   Design `EntityMapper` contract (callback & class-based).<br>*   Implement `MapEntitiesJob` dispatched per chunk (batch-aware, idempotent).<br>*   Add statuses: `integrated`, `failed_mapping`; update state machine + tests. |
+| v0.10.0 | **Error-tolerant file reading** (robust streaming) | 5   | *   Abstract file driver (local, s3/minio) via `StorageAdapter`.<br>*   Implement streaming read strategies (temp local streaming + generator/cursor) and resume on network fault.<br>*   Wrapper layers: checksum, byte-range retries, exponential backoff, resume markers. |
+| v0.12.0 | **Logical error tracking** (business-rule errors) | 3   | *   Define error taxonomy: validation vs transformation vs mapping vs system.<br>*   Store structured logical errors in `excel_row_errors` (field, code, severity, locale messages).<br>*   Expose export endpoint / CSV for corrected rows. |
+| v0.13.0 | **Service unit tests** | 4   | *   Identify all services and add isolated unit tests with strict contracts & mocks (TransformService, ValidateService, ChunkerService, RowExtractionService, ImportManager, ExcelRowRepository). |
+| v0.14.0 | **Feature tests** (end-to-end feature scenarios) | 4   | *   Write feature tests for: upload→extract→chunk→map, reprocess corrected rows, error-export-import flow. |
+| v0.15.0 | **Integration & integrity tests** | 3   | *   Large-file integration (2sheets2000rows and larger), DB invariants, idempotency under retries. |
+| v0.16.0 | **i18n / multilingual support** | 3   | *   Localize row errors, logs, and user-visible messages using Laravel Lang files; allow per-file locale override. |
+| v0.17.0 | **Multi-engine support** (Maatwebsite, Spout) | 5   | *   Define `ExcelEngineInterface`, implement adapters for Maatwebsite & Spout (streaming-friendly). |
+| v0.11.0 | **Docs refresh (continuous)** | 2   | *   Keep docs updated in parallel — prioritize TESTING.md, USAGE.md, examples for entity mapping and reprocessing. |
+| v0.18.0 | **Composer granularity research** (investigate partial installations / tree-shaking) | 5 (research + infra) | *   Prototype minimal adapters that depend only on required sub-packages; open an RFC/PR to Composer ecosystem if viable.<br>*   This is a long-term, high-effort, high-reward objective. |
 
----
-
-## Version 0.8.0 (Current - In Progress)
-
-**Goal:** Implement a robust, event-driven Excel import pipeline with transformers, validators, and chunked row processing.
-
-**Completed:**
-- Event-driven pipeline for file → sheet → row processing.
-- Chunking system and `ExcelRowChunk` model.
-- Transformer and Validator foundation (callback-based).
-- Job orchestration and error handling.
-- Tests for chunking, row processing, transformer/validator, and pipeline events.
-
-**In Progress:**
-- Storing row-level errors in `ExcelRowError`.
-- Multi-language support for error messages.
-- Singleton transformer and validator resolution per sheet in queue workers.
-- Improving memory efficiency and logging.
-
-**Next Steps / Priority:**
-1. Complete row error handling and re-processing workflow.
-2. Test larger Excel files (thousands of rows, multiple sheets).
-3. Implement ENUMs for status tracking instead of strings.
-4. Optimize database queries and memory usage.
-
----
-
-## Version 0.9.0 (Near Future)
-
-**Goals:**
-- Add support for multiple Excel engines (e.g., Maatwebsite, Spout).
-- Extend transformer system to allow OOP-style pipelines.
-- Add configuration to publish transformer/validator registration file separately from tests.
-- Improve documentation with examples and flow diagrams.
-- Add integration tests for multi-sheet, multi-engine workflows.
-
----
-
-## Version 1.0.0 (Stable Release)
-
-**Goals:**
-- Fully stable, production-ready package.
-- Well-documented API and examples for developers.
-- Complete coverage of common validation and transformation scenarios.
-- Support for high-performance, memory-efficient large Excel files.
-- Robust retry and error-handling mechanism.
-
----
-
-## Future Ideas
-
-- Web UI for monitoring import progress and errors.
-- Support for incremental updates / partial imports.
-- Analytics and reporting for processed data.
-- Extend package to support CSV and other tabular formats.
+- - -
