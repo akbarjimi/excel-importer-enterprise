@@ -27,7 +27,10 @@ return new class extends Migration
             $table->timestamp('rows_extracted_at')->nullable();
             $table->index(['excel_file_id', 'rows_extracted_at']);
 
-            $table->unsignedInteger('chunk_count')->nullable();
+            $table->unsignedInteger('chunk_count')->default(0);
+
+            $table->unsignedInteger('processed_chunks')->default(0);
+
             $table->json('meta')->nullable();
             $table->text('exception')->nullable();
 
