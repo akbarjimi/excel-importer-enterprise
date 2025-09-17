@@ -10,4 +10,5 @@ enum ExcelRowStatus: string
     case TRANSFORMING = 'transforming';                     // Being transformed or normalized
     case FAILED_TRANSFORMATION = 'failed_transformation';   // Transformation error
     case PROCESSED = 'processed';                           // Row handled successfully
+    case MAPPED = 'mapped';
 }

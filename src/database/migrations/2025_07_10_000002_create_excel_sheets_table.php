@@ -31,6 +31,9 @@ return new class extends Migration
 
             $table->unsignedInteger('processed_chunks')->default(0);
 
+            $table->unsignedInteger('mapped_count')->default(0);
+            $table->timestamp('mapped_at')->nullable();
+
             $table->json('meta')->nullable();
             $table->text('exception')->nullable();
 

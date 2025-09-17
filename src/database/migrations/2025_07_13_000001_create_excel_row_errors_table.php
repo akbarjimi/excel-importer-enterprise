@@ -16,10 +16,12 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->index();
 
-            $table->string('field')->nullable(); // Column in Excel where error occurred
-            $table->string('error_type')->default('validation'); // e.g., validation, transform, system
+            $table->string('field')->nullable();
+            $table->string('error_type')->default('validation');
             $table->string('error_code')->nullable();
             $table->text('message');
+
+            $table->boolean('is_mapping_error')->default(false);
 
             $table->timestamps();
         });

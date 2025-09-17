@@ -30,6 +30,9 @@ return new class extends Migration
             $table->unsignedBigInteger('owner_id')->nullable();
             $table->string('owner_type')->nullable();
 
+            $table->timestamp('mapped_at')->nullable();
+            $table->unsignedInteger('mapped_count')->default(0);
+
             $table->timestamps();
         });
     }

@@ -5,8 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('excel_rows', function (Blueprint $table) {
@@ -24,11 +23,13 @@ return new class extends Migration
             $table->string('hash_algo')->default('md5');
             $table->string('content_hash')->nullable();
 
-            $table->enum('status', array_column(ExcelRowStatus::cases(), 'value'))
-                ->default(ExcelRowStatus::PENDING->value)
-                ->index();
+            $table->enum('status',
+                array_column(ExcelRowStatus::cases(), 'value'),
+            )->default(ExcelRowStatus::PENDING->value)->index();
 
             $table->unsignedInteger('chunk_index')->nullable()->index();
+
+            $table->timestamp('mapped_at')->nullable();
 
             $table->timestamps();
 

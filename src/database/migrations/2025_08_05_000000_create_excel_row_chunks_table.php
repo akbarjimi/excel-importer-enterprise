@@ -20,6 +20,11 @@ return new class extends Migration
             $table->text('error')->nullable();
             $table->timestamp('dispatched_at')->nullable();
             $table->timestamp('processed_at')->nullable();
+
+            $table->enum('mapping_status', ['pending', 'processing', 'completed', 'failed'])
+                ->default('pending')->index();
+            $table->timestamp('mapped_at')->nullable();
+
             $table->timestamps();
 
             $table->unique(['excel_sheet_id', 'from_row_id', 'to_row_id'], 'unique_sheet_row_range');
