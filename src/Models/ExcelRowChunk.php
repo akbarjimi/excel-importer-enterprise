@@ -2,7 +2,7 @@
 
 namespace Akbarjimi\ExcelImporter\Models;
 
-use Database\Factories\ExcelRowChunkFactory;
+use Akbarjimi\ExcelImporter\Database\Factories\ExcelRowChunkFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
