@@ -2,7 +2,6 @@
 
 namespace Akbarjimi\ExcelImporter\Database\Factories;
 
-use Akbarjimi\ExcelImporter\Enums\ExcelFileStatus;
 use Akbarjimi\ExcelImporter\Models\ExcelFile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
