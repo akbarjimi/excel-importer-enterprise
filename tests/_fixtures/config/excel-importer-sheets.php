@@ -1,5 +1,7 @@
 <?php
 
+use Tests\Stubs\Models\UserStub;
+
 return [
     // 1sheet3rows1header.xlsx
     'Sheet1' => [
@@ -13,11 +15,15 @@ return [
             'B1' => 'required|string|email',
             'C1' => 'required|integer|min:31',
         ],
-        'mapper' => fn(array $row): array => [
-            'name'  => $row['A1'],
-            'email' => $row['B1'],
-            'age'   => $row['C1'],
-        ],
+        'mapper' => function (array $row) {
+            $user = new UserStub();
+            $user->fill([
+                'name' => $row['A1'],
+                'email' => $row['B1'],
+                'age' => $row['C1'],
+            ]);
+            return $user;
+        },
     ],
     // 2sheets2rows.xlsx
     'Sheet2' => [
