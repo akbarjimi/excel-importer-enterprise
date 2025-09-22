@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Akbarjimi\ExcelImporter\Database\Factories;
 
 use Akbarjimi\ExcelImporter\Models\ExcelRowChunk;
 use Akbarjimi\ExcelImporter\Models\ExcelSheet;
