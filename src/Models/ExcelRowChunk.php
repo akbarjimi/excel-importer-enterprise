@@ -2,7 +2,7 @@
 
 namespace Akbarjimi\ExcelImporter\Models;
 
-use Akbarjimi\ExcelImporter\Database\Factories\ExcelFileFactory;
+use Database\Factories\ExcelRowChunkFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,8 +29,8 @@ final class ExcelRowChunk extends Model
         return $this->belongsTo(ExcelSheet::class, 'excel_sheet_id');
     }
 
-    protected static function newFactory(): ExcelFileFactory
+    protected static function newFactory(): ExcelRowChunkFactory
     {
-        return ExcelFileFactory::new();
+        return ExcelRowChunkFactory::new();
     }
 }
