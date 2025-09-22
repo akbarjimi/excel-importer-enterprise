@@ -4,16 +4,20 @@ return [
     // 1sheet3rows1header.xlsx
     'Sheet1' => [
         'transformers' => [
-            'A1' => fn ($value) => strtoupper($value),
-            'B1' => fn ($value) => strtoupper($value),
-            'C1' => fn ($value) => strtoupper($value),
+            'A1' => fn(string $value): string => strtoupper($value),
+            'B1' => fn(string $value): string => strtolower($value),
+            'C1' => fn(string|int $value): int => (int) $value,
         ],
         'validation' => [
             'A1' => 'required|string|max:255',
             'B1' => 'required|string|email',
-            'C1' => 'required|int|min:31',
+            'C1' => 'required|integer|min:31',
         ],
-        'mapper' => fn (array $row) => $row,
+        'mapper' => fn(array $row): array => [
+            'name'  => $row['A1'],
+            'email' => $row['B1'],
+            'age'   => $row['C1'],
+        ],
     ],
     // 2sheets2rows.xlsx
     'Sheet2' => [
