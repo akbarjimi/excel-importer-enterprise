@@ -2,8 +2,12 @@
 
 namespace Akbarjimi\ExcelImporter\Jobs;
 
+use Akbarjimi\ExcelImporter\Enums\ExcelRowStatus;
+use Akbarjimi\ExcelImporter\Events\AllChunksCompleted;
 use Akbarjimi\ExcelImporter\Models\ExcelRow;
 use Akbarjimi\ExcelImporter\Models\ExcelRowChunk;
+use Akbarjimi\ExcelImporter\Models\ExcelRowError;
+use Akbarjimi\ExcelImporter\Models\ExcelSheet;
 use Akbarjimi\ExcelImporter\Repositories\ExcelRowRepository;
 use Akbarjimi\ExcelImporter\Services\TransformService;
 use Akbarjimi\ExcelImporter\Services\ValidateService;
@@ -12,37 +16,32 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 final class ProcessChunkJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable;
 
-    public int $tries = 5;
-
-    public int $timeout = 120;
-
-    public function __construct(public readonly int $chunkId) {}
+    public function __construct(public readonly int $chunkId)
+    {
+    }
 
     public function middleware(): array
     {
         return [(new WithoutOverlapping("chunk:{$this->chunkId}"))->dontRelease()];
     }
 
-    /**
-     * @param  TransformService  $transform  transforms a single ExcelRow -> array
-     * @param  ValidateService  $validate  validates transformed data (throws on invalid)
-     * @param  ExcelRowRepository  $repo  low-level persistence (bulk/row ops)
-     */
     public function handle(
-        TransformService $transform,
-        ValidateService $validate,
+        TransformService   $transform,
+        ValidateService    $validate,
         ExcelRowRepository $repo
-    ): void {
+    ): void
+    {
         /** @var ExcelRowChunk $chunk */
         $chunk = ExcelRowChunk::findOrFail($this->chunkId);
+        $sheet = ExcelSheet::findOrFail($chunk->excel_sheet_id);
 
         if ($chunk->status === 'completed') {
             return;
@@ -56,50 +55,74 @@ final class ProcessChunkJob implements ShouldQueue
             ->orderBy('id')
             ->cursor();
 
-        $outgoingRows = [];
-        $batchSize = 200;
-        $processedCount = 0;
+        $buffer = [];
+        $batchSize = config('excel-importer.insert_batch_size', 100);
+        $processed = 0;
 
         DB::beginTransaction();
         try {
-            /** @var ExcelRow $row */
             foreach ($rowsCursor as $row) {
-                $payload = $transform->apply($row->toArray());
-                $validate->apply($payload);
+                try {
+                    $payload = $transform->apply($row->content ?? $row->toArray());
+                    $validate->apply($payload);
 
-                $outgoingRows[] = [
-                    'excel_sheet_id' => $row->excel_sheet_id,
-                    'row_index' => $row->row_index,
-                    'content' => json_encode($payload, JSON_UNESCAPED_UNICODE),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+                    $buffer[] = [
+                        'id' => $row->id,
+                        'excel_sheet_id' => $row->excel_sheet_id,
+                        'row_index' => $row->row_index,
+                        'content' => json_encode($payload, JSON_UNESCAPED_UNICODE),
+                        'updated_at' => now(),
+                    ];
+                } catch (Throwable $e) {
+                    ExcelRowError::create([
+                        'excel_row_id' => $row->id,
+                        'field' => null,
+                        'error_type' => 'validation',
+                        'error_code' => null,
+                        'message' => $e->getMessage(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                    $row->update(['status' => ExcelRowStatus::FAILED_VALIDATION->value]);
+                }
 
-                $processedCount++;
-
-                if (count($outgoingRows) >= $batchSize) {
-                    $repo->bulkUpsert($outgoingRows);
-                    $outgoingRows = [];
+                if (count($buffer) >= $batchSize) {
+                    $repo->bulkUpsert($buffer);
+                    $processed += count($buffer);
+                    $buffer = [];
                 }
             }
 
-            if (! empty($outgoingRows)) {
-                $repo->bulkUpsert($outgoingRows);
+            if (!empty($buffer)) {
+                $repo->bulkUpsert($buffer);
+                $processed += count($buffer);
+                $buffer = [];
             }
 
-            $chunk->update([
-                'status' => 'completed',
-                'processed_at' => now(),
-                'error' => null,
-            ]);
+            $chunk->update(['status' => 'completed', 'processed_at' => now(), 'error' => null]);
 
             DB::commit();
 
-            Log::info('Chunk processed', [
-                'chunk_id' => $chunk->getKey(),
-                'rows' => $processedCount,
-            ]);
-        } catch (\Throwable $e) {
+            $sheetUpdated = DB::table('excel_sheets')
+                ->where('id', $sheet->id)
+                ->whereColumn('processed_chunks', '<', 'chunk_count')
+                ->increment('processed_chunks');
+
+            $sheetFresh = ExcelSheet::find($sheet->id);
+            if ($sheetUpdated > 0) {
+                if ($sheetFresh->processed_chunks >= $sheetFresh->chunk_count && $sheetFresh->chunk_count > 0) {
+                    event(new AllChunksCompleted($sheetFresh->id));
+                    Log::info('AllChunksCompleted fired (via increment)', ['sheet_id' => $sheetFresh->id]);
+                }
+            } else {
+                if ($sheetFresh->processed_chunks >= $sheetFresh->chunk_count && $sheetFresh->chunk_count > 0) {
+                    event(new AllChunksCompleted($sheetFresh->id));
+                    Log::info('AllChunksCompleted fired (fallback)', ['sheet_id' => $sheetFresh->id]);
+                }
+            }
+
+            Log::info('Chunk processed', ['chunk_id' => $chunk->id, 'processed' => $processed]);
+        } catch (Throwable $e) {
             DB::rollBack();
 
             $chunk->update([
